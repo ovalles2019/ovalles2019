@@ -6,7 +6,7 @@ Embracing a polymath approach.<br>
 Exploring machine learning and AI.<br>
 Contributing to open-source projects. <br>
 
-https://www.instagram.com/oskav/
+[https://www.instagram.com/oskav/](https://medium.com/@ovalles6845)
 
 
 
