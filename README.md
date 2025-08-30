@@ -6,7 +6,9 @@ Embracing a polymath approach.<br>
 Exploring machine learning and AI.<br>
 Contributing to open-source projects. <br>
 
+Website:🧑🏻‍💻 https://www.oscar-valles.com/
 https://medium.com/@ovalles6845
+
 
 
 
