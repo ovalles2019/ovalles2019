@@ -7,7 +7,7 @@ Exploring machine learning and AI.<br>
 Contributing to open-source projects. <br>
 
 Website:🧑🏻‍💻 https://www.oscar-valles.com/
-https://medium.com/@ovalles6845
+Medium Blog:🗓️ https://medium.com/@ovalles6845
 
 
 
