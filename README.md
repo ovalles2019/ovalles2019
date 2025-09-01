@@ -1,7 +1,7 @@
 Hello My Name is Oscar ! 
 
 Passionate about AWS and cloud technologies.<br>
-Pursuing a master's degree in Computer Engineering.<br>
+Pursuing a master's degree in Computer Engineering at UTD.<br>
 Embracing a polymath approach.<br>
 Exploring machine learning and AI.<br>
 Contributing to open-source projects. <br>
