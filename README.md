@@ -1,6 +1,6 @@
 # Hi, I'm Oscar Valles
 
-Cloud & AI engineer building **agentic workflows**, **RAG systems**, and **MCP tooling** on AWS.
+Cloud & AI/ML engineer building **agentic workflows**, **RAG systems**, and **MCP tooling** on AWS.
 
 - Portfolio site: [oscar-valles.com](https://www.oscar-valles.com/)
 - Blog: [Medium @ovalles6845](https://medium.com/@ovalles6845)
