@@ -10,14 +10,15 @@ Cloud & AI/ML engineer building **agentic workflows**, **RAG systems**, and **MC
 
 | Project | What it demonstrates |
 |--------|----------------------|
+| [cloud-sre-agent](https://github.com/ovalles2019/cloud-sre-agent) · [live demo](https://cloud-sre-agent.onrender.com/) | **Bedrock** SRE/FinOps agent — CloudWatch, Cost Explorer, Trusted Advisor, HITL remediation |
+| [agentic-governance-harness](https://github.com/ovalles2019/agentic-governance-harness) · [live demo](https://agentic-governance-demo.onrender.com/) | Agentic AI **governance benchmark** — guardrail trip rate, policy latency, cost per resolved task |
 | [agentic-ai-workflows](https://github.com/ovalles2019/agentic-ai-workflows) | Single & multi-agent patterns with **LangChain**, **LangGraph**, **CrewAI**, **AutoGen** |
-| [oscar-portfolio](https://github.com/ovalles2019/oscar-portfolio) | Flutter portfolio app |
 | [pgvector-rag-demo](https://github.com/ovalles2019/pgvector-rag-demo) | RAG with **PostgreSQL + pgvector**, local embeddings, Streamlit UI |
-| [small-biz-operations-mcp](https://github.com/ovalles2019/small-biz-operations-mcp) | MCP agent for small-business ops + dashboard |
 | [aws-cloudops-mcp](https://github.com/ovalles2019/aws-cloudops-mcp) | AWS CloudOps MCP server (EC2, CloudWatch, S3, Lambda, …) |
+| [small-biz-operations-mcp](https://github.com/ovalles2019/small-biz-operations-mcp) | MCP agent for small-business ops + dashboard |
 | [ml-experiment-tracker-mcp](https://github.com/ovalles2019/ml-experiment-tracker-mcp) | ML experiment tracking MCP server (SQLite) |
-| [fraud-detection-system](https://github.com/ovalles2019/fraud-detection-system) | Flask API + React dashboard for transport fraud analytics |
 | [budget-insights-platform](https://github.com/ovalles2019/budget-insights-platform) | Cloud-native finance platform (K8s, AWS microservices) |
+| [fraud-detection-system](https://github.com/ovalles2019/fraud-detection-system) | Flask API + React dashboard for transport fraud analytics |
 | [ml-cloud-deployment](https://github.com/ovalles2019/ml-cloud-deployment) | Spam detection ML → **AWS Lambda** + API Gateway |
 
 ## Tech stack
