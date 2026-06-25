@@ -10,6 +10,7 @@ Cloud & AI/ML engineer building **agentic workflows**, **RAG systems**, and **MC
 
 | Project | What it demonstrates |
 |--------|----------------------|
+| [raditriage](https://github.com/ovalles2019/raditriage) · [live demo](https://raditriage.onrender.com/) | **Agentic** veterinary radiology workflow — classify→RAG→draft→route pipeline, **RBAC**, SLA dashboard, key-safe **Claude** proxy |
 | [cloud-sre-agent](https://github.com/ovalles2019/cloud-sre-agent) · [live demo](https://cloud-sre-agent.onrender.com/) | **Bedrock** SRE/FinOps agent — CloudWatch, Cost Explorer, Trusted Advisor, HITL remediation |
 | [agentic-governance-harness](https://github.com/ovalles2019/agentic-governance-harness) · [live demo](https://agentic-governance-demo.onrender.com/) | Agentic AI **governance benchmark** — guardrail trip rate, policy latency, cost per resolved task |
 | [agentic-ai-workflows](https://github.com/ovalles2019/agentic-ai-workflows) | Single & multi-agent patterns with **LangChain**, **LangGraph**, **CrewAI**, **AutoGen** |
