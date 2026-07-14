@@ -4,7 +4,7 @@ Cloud & AI/ML engineer building **agentic workflows**, **RAG systems**, and **MC
 
 - Portfolio site: [oscar-valles.com](https://www.oscar-valles.com/)
 - Blog: [Medium @ovalles6845](https://medium.com/@ovalles6845)
-- M.S. Computer Engineering (cloud & AI focus), UTD
+- M.S. Computer Engineering (cloud & AI focus), @ University of Texas at Dallas
 
 ## Featured projects (2025–2026)
 
