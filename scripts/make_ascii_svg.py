@@ -21,25 +21,26 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "source-prepped.png")
 OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "oscar-ascii.svg")
 
-COLS = 100
-ROWS = 53
-CELL_W = 8
-CELL_H = 15
+COLS = 112
+ROWS = 60
+CELL_W = 7.2
+CELL_H = 14.0
 RAMP = " .`:-=+*cs#%@"  # bright(sparse) -> dark(dense); leading space clears bg
 
-CONTRAST = 1.05
+CONTRAST = 1.12
 BRIGHTNESS = 1.0
 GAMMA = 1.18
 SHARPEN = False
 WHITE_FLOOR = 0.80
+DESPECKLE = True  # drop isolated glyphs that read as noise
 
 PAD = 20
 TITLEBAR_H = 30
 STATUS_H = 30
 ART_W = COLS * CELL_W
 ART_H = ROWS * CELL_H
-CANVAS_W = ART_W + PAD * 2
-CANVAS_H = TITLEBAR_H + ART_H + STATUS_H + PAD
+CANVAS_W = int(ART_W + PAD * 2)
+CANVAS_H = int(TITLEBAR_H + ART_H + STATUS_H + PAD)
 
 BG = "#0d1117"
 BG2 = "#111722"
@@ -48,8 +49,8 @@ TITLE_TEXT = "#7d8590"
 INK = "#c9d1d9"
 CURSOR = "#c9d1d9"
 
-ROW_DUR = 0.11
-STAGGER = 0.11
+ROW_DUR = 0.10
+STAGGER = 0.10
 
 im = Image.open(SRC).convert("L")
 if SHARPEN:
@@ -74,6 +75,22 @@ for y in range(ROWS):
         idx = max(0, min(len(RAMP) - 1, idx))
         chars.append(RAMP[idx])
     rows_txt.append("".join(chars))
+
+if DESPECKLE:
+    grid = [list(r) for r in rows_txt]
+    for y in range(1, ROWS - 1):
+        for x in range(1, COLS - 1):
+            if grid[y][x] == " ":
+                continue
+            neighbors = [
+                grid[y + dy][x + dx]
+                for dy in (-1, 0, 1)
+                for dx in (-1, 0, 1)
+                if not (dx == 0 and dy == 0)
+            ]
+            if sum(c == " " for c in neighbors) >= 7:
+                grid[y][x] = " "
+    rows_txt = ["".join(r) for r in grid]
 
 art_top = TITLEBAR_H + PAD * 0.35
 

@@ -17,7 +17,7 @@ OUT = os.path.join(HERE, "..", "info-card.svg")
 STATIC = bool(os.environ.get("STATIC"))
 
 # Matches portrait display height when README uses width 370 / 490
-W, H = 700, 550
+W, H = 700, 575
 PAD = 28
 TITLEBAR_H = 30
 
