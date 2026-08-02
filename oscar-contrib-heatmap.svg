@@ -1,0 +1,410 @@
+<svg viewBox="0 0 928 212" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+.heatmap-cell { animation: popIn 0.3s ease-out forwards; opacity: 0; }
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+.heatmap-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 12px; fill: #8b949e; }
+.heatmap-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; font-weight: bold; fill: #c9d1d9; }
+.heatmap-stats { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 11px; fill: #8b949e; }
+</style>
+</defs>
+<rect width="928" height="212" fill="#0d1117" rx="4"/>
+<text x="60" y="25" class="heatmap-title">Contributions in the last year</text>
+<text x="60.0" y="38" class="heatmap-label">Jan</text>
+<text x="130.4" y="38" class="heatmap-label">Feb</text>
+<text x="200.8" y="38" class="heatmap-label">Mar</text>
+<text x="271.20000000000005" y="38" class="heatmap-label">Apr</text>
+<text x="341.6" y="38" class="heatmap-label">May</text>
+<text x="412.0" y="38" class="heatmap-label">Jun</text>
+<text x="482.40000000000003" y="38" class="heatmap-label">Jul</text>
+<text x="552.8000000000001" y="38" class="heatmap-label">Aug</text>
+<text x="623.2" y="38" class="heatmap-label">Sep</text>
+<text x="693.6" y="38" class="heatmap-label">Oct</text>
+<text x="764.0" y="38" class="heatmap-label">Nov</text>
+<text x="834.4000000000001" y="38" class="heatmap-label">Dec</text>
+<text x="5" y="54" class="heatmap-label" text-anchor="start">S</text>
+<text x="5" y="70" class="heatmap-label" text-anchor="start">M</text>
+<text x="5" y="86" class="heatmap-label" text-anchor="start">T</text>
+<text x="5" y="102" class="heatmap-label" text-anchor="start">W</text>
+<text x="5" y="118" class="heatmap-label" text-anchor="start">T</text>
+<text x="5" y="134" class="heatmap-label" text-anchor="start">F</text>
+<text x="5" y="150" class="heatmap-label" text-anchor="start">S</text>
+<rect x="60" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 0ms" data-date="2025-08-02" data-count="0"/>
+<rect x="60" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 10ms" data-date="2025-08-03" data-count="0"/>
+<rect x="60" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 20ms" data-date="2025-08-04" data-count="0"/>
+<rect x="60" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 30ms" data-date="2025-08-05" data-count="0"/>
+<rect x="60" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 40ms" data-date="2025-08-06" data-count="0"/>
+<rect x="60" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 50ms" data-date="2025-08-07" data-count="0"/>
+<rect x="60" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 60ms" data-date="2025-08-08" data-count="0"/>
+<rect x="76" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 70ms" data-date="2025-08-09" data-count="0"/>
+<rect x="76" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 80ms" data-date="2025-08-10" data-count="0"/>
+<rect x="76" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 90ms" data-date="2025-08-11" data-count="0"/>
+<rect x="76" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 100ms" data-date="2025-08-12" data-count="0"/>
+<rect x="76" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 110ms" data-date="2025-08-13" data-count="0"/>
+<rect x="76" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 120ms" data-date="2025-08-14" data-count="0"/>
+<rect x="76" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 130ms" data-date="2025-08-15" data-count="0"/>
+<rect x="92" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 140ms" data-date="2025-08-16" data-count="0"/>
+<rect x="92" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 150ms" data-date="2025-08-17" data-count="0"/>
+<rect x="92" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 160ms" data-date="2025-08-18" data-count="0"/>
+<rect x="92" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 170ms" data-date="2025-08-19" data-count="0"/>
+<rect x="92" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 180ms" data-date="2025-08-20" data-count="0"/>
+<rect x="92" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 190ms" data-date="2025-08-21" data-count="0"/>
+<rect x="92" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 200ms" data-date="2025-08-22" data-count="0"/>
+<rect x="108" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 210ms" data-date="2025-08-23" data-count="0"/>
+<rect x="108" y="40" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 220ms" data-date="2025-08-24" data-count="1"/>
+<rect x="108" y="56" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 230ms" data-date="2025-08-25" data-count="1"/>
+<rect x="108" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 240ms" data-date="2025-08-26" data-count="0"/>
+<rect x="108" y="88" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 250ms" data-date="2025-08-27" data-count="1"/>
+<rect x="108" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 260ms" data-date="2025-08-28" data-count="0"/>
+<rect x="108" y="120" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 270ms" data-date="2025-08-29" data-count="3"/>
+<rect x="124" y="136" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 280ms" data-date="2025-08-30" data-count="2"/>
+<rect x="124" y="40" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 290ms" data-date="2025-08-31" data-count="1"/>
+<rect x="124" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 300ms" data-date="2025-09-01" data-count="0"/>
+<rect x="124" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 310ms" data-date="2025-09-02" data-count="0"/>
+<rect x="124" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 320ms" data-date="2025-09-03" data-count="0"/>
+<rect x="124" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 330ms" data-date="2025-09-04" data-count="0"/>
+<rect x="124" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 340ms" data-date="2025-09-05" data-count="0"/>
+<rect x="140" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 350ms" data-date="2025-09-06" data-count="0"/>
+<rect x="140" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 360ms" data-date="2025-09-07" data-count="0"/>
+<rect x="140" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 370ms" data-date="2025-09-08" data-count="0"/>
+<rect x="140" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 380ms" data-date="2025-09-09" data-count="0"/>
+<rect x="140" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 390ms" data-date="2025-09-10" data-count="0"/>
+<rect x="140" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 400ms" data-date="2025-09-11" data-count="0"/>
+<rect x="140" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 410ms" data-date="2025-09-12" data-count="0"/>
+<rect x="156" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 420ms" data-date="2025-09-13" data-count="0"/>
+<rect x="156" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 430ms" data-date="2025-09-14" data-count="0"/>
+<rect x="156" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 440ms" data-date="2025-09-15" data-count="0"/>
+<rect x="156" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 450ms" data-date="2025-09-16" data-count="0"/>
+<rect x="156" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 460ms" data-date="2025-09-17" data-count="0"/>
+<rect x="156" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 470ms" data-date="2025-09-18" data-count="0"/>
+<rect x="156" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 480ms" data-date="2025-09-19" data-count="0"/>
+<rect x="172" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 490ms" data-date="2025-09-20" data-count="0"/>
+<rect x="172" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 500ms" data-date="2025-09-21" data-count="0"/>
+<rect x="172" y="56" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 510ms" data-date="2025-09-22" data-count="1"/>
+<rect x="172" y="72" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 520ms" data-date="2025-09-23" data-count="1"/>
+<rect x="172" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 530ms" data-date="2025-09-24" data-count="0"/>
+<rect x="172" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 540ms" data-date="2025-09-25" data-count="0"/>
+<rect x="172" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 550ms" data-date="2025-09-26" data-count="0"/>
+<rect x="188" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 560ms" data-date="2025-09-27" data-count="0"/>
+<rect x="188" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 570ms" data-date="2025-09-28" data-count="0"/>
+<rect x="188" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 580ms" data-date="2025-09-29" data-count="0"/>
+<rect x="188" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 590ms" data-date="2025-09-30" data-count="0"/>
+<rect x="188" y="88" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 600ms" data-date="2025-10-01" data-count="1"/>
+<rect x="188" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 610ms" data-date="2025-10-02" data-count="0"/>
+<rect x="188" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 620ms" data-date="2025-10-03" data-count="0"/>
+<rect x="204" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 630ms" data-date="2025-10-04" data-count="0"/>
+<rect x="204" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 640ms" data-date="2025-10-05" data-count="0"/>
+<rect x="204" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 650ms" data-date="2025-10-06" data-count="0"/>
+<rect x="204" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 660ms" data-date="2025-10-07" data-count="0"/>
+<rect x="204" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 670ms" data-date="2025-10-08" data-count="0"/>
+<rect x="204" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 680ms" data-date="2025-10-09" data-count="0"/>
+<rect x="204" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 690ms" data-date="2025-10-10" data-count="0"/>
+<rect x="220" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 700ms" data-date="2025-10-11" data-count="0"/>
+<rect x="220" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 710ms" data-date="2025-10-12" data-count="0"/>
+<rect x="220" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 720ms" data-date="2025-10-13" data-count="0"/>
+<rect x="220" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 730ms" data-date="2025-10-14" data-count="0"/>
+<rect x="220" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 740ms" data-date="2025-10-15" data-count="0"/>
+<rect x="220" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 750ms" data-date="2025-10-16" data-count="0"/>
+<rect x="220" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 760ms" data-date="2025-10-17" data-count="0"/>
+<rect x="236" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 770ms" data-date="2025-10-18" data-count="0"/>
+<rect x="236" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 780ms" data-date="2025-10-19" data-count="0"/>
+<rect x="236" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 790ms" data-date="2025-10-20" data-count="0"/>
+<rect x="236" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 800ms" data-date="2025-10-21" data-count="0"/>
+<rect x="236" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 810ms" data-date="2025-10-22" data-count="0"/>
+<rect x="236" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 820ms" data-date="2025-10-23" data-count="0"/>
+<rect x="236" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 830ms" data-date="2025-10-24" data-count="0"/>
+<rect x="252" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 840ms" data-date="2025-10-25" data-count="0"/>
+<rect x="252" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 850ms" data-date="2025-10-26" data-count="0"/>
+<rect x="252" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 860ms" data-date="2025-10-27" data-count="0"/>
+<rect x="252" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 870ms" data-date="2025-10-28" data-count="0"/>
+<rect x="252" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 880ms" data-date="2025-10-29" data-count="0"/>
+<rect x="252" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 890ms" data-date="2025-10-30" data-count="0"/>
+<rect x="252" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 900ms" data-date="2025-10-31" data-count="0"/>
+<rect x="268" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 910ms" data-date="2025-11-01" data-count="0"/>
+<rect x="268" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 920ms" data-date="2025-11-02" data-count="0"/>
+<rect x="268" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 930ms" data-date="2025-11-03" data-count="0"/>
+<rect x="268" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 940ms" data-date="2025-11-04" data-count="0"/>
+<rect x="268" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 950ms" data-date="2025-11-05" data-count="0"/>
+<rect x="268" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 960ms" data-date="2025-11-06" data-count="0"/>
+<rect x="268" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 970ms" data-date="2025-11-07" data-count="0"/>
+<rect x="284" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 980ms" data-date="2025-11-08" data-count="0"/>
+<rect x="284" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 990ms" data-date="2025-11-09" data-count="0"/>
+<rect x="284" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1000ms" data-date="2025-11-10" data-count="0"/>
+<rect x="284" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1010ms" data-date="2025-11-11" data-count="0"/>
+<rect x="284" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1020ms" data-date="2025-11-12" data-count="0"/>
+<rect x="284" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1030ms" data-date="2025-11-13" data-count="0"/>
+<rect x="284" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1040ms" data-date="2025-11-14" data-count="0"/>
+<rect x="300" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1050ms" data-date="2025-11-15" data-count="0"/>
+<rect x="300" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1060ms" data-date="2025-11-16" data-count="0"/>
+<rect x="300" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1070ms" data-date="2025-11-17" data-count="0"/>
+<rect x="300" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1080ms" data-date="2025-11-18" data-count="0"/>
+<rect x="300" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1090ms" data-date="2025-11-19" data-count="0"/>
+<rect x="300" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1100ms" data-date="2025-11-20" data-count="0"/>
+<rect x="300" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1110ms" data-date="2025-11-21" data-count="0"/>
+<rect x="316" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1120ms" data-date="2025-11-22" data-count="0"/>
+<rect x="316" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1130ms" data-date="2025-11-23" data-count="0"/>
+<rect x="316" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1140ms" data-date="2025-11-24" data-count="0"/>
+<rect x="316" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1150ms" data-date="2025-11-25" data-count="0"/>
+<rect x="316" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1160ms" data-date="2025-11-26" data-count="0"/>
+<rect x="316" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1170ms" data-date="2025-11-27" data-count="0"/>
+<rect x="316" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1180ms" data-date="2025-11-28" data-count="0"/>
+<rect x="332" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1190ms" data-date="2025-11-29" data-count="0"/>
+<rect x="332" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1200ms" data-date="2025-11-30" data-count="0"/>
+<rect x="332" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1210ms" data-date="2025-12-01" data-count="0"/>
+<rect x="332" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1220ms" data-date="2025-12-02" data-count="0"/>
+<rect x="332" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1230ms" data-date="2025-12-03" data-count="0"/>
+<rect x="332" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1240ms" data-date="2025-12-04" data-count="0"/>
+<rect x="332" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1250ms" data-date="2025-12-05" data-count="0"/>
+<rect x="348" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1260ms" data-date="2025-12-06" data-count="0"/>
+<rect x="348" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1270ms" data-date="2025-12-07" data-count="0"/>
+<rect x="348" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1280ms" data-date="2025-12-08" data-count="0"/>
+<rect x="348" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1290ms" data-date="2025-12-09" data-count="0"/>
+<rect x="348" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1300ms" data-date="2025-12-10" data-count="0"/>
+<rect x="348" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1310ms" data-date="2025-12-11" data-count="0"/>
+<rect x="348" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1320ms" data-date="2025-12-12" data-count="0"/>
+<rect x="364" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1330ms" data-date="2025-12-13" data-count="0"/>
+<rect x="364" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1340ms" data-date="2025-12-14" data-count="0"/>
+<rect x="364" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1350ms" data-date="2025-12-15" data-count="0"/>
+<rect x="364" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1360ms" data-date="2025-12-16" data-count="0"/>
+<rect x="364" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1370ms" data-date="2025-12-17" data-count="0"/>
+<rect x="364" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1380ms" data-date="2025-12-18" data-count="0"/>
+<rect x="364" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1390ms" data-date="2025-12-19" data-count="0"/>
+<rect x="380" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1400ms" data-date="2025-12-20" data-count="0"/>
+<rect x="380" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1410ms" data-date="2025-12-21" data-count="0"/>
+<rect x="380" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1420ms" data-date="2025-12-22" data-count="0"/>
+<rect x="380" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1430ms" data-date="2025-12-23" data-count="0"/>
+<rect x="380" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1440ms" data-date="2025-12-24" data-count="0"/>
+<rect x="380" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1450ms" data-date="2025-12-25" data-count="0"/>
+<rect x="380" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1460ms" data-date="2025-12-26" data-count="0"/>
+<rect x="396" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1470ms" data-date="2025-12-27" data-count="0"/>
+<rect x="396" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1480ms" data-date="2025-12-28" data-count="0"/>
+<rect x="396" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1490ms" data-date="2025-12-29" data-count="0"/>
+<rect x="396" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1500ms" data-date="2025-12-30" data-count="0"/>
+<rect x="396" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1510ms" data-date="2025-12-31" data-count="0"/>
+<rect x="396" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1520ms" data-date="2026-01-01" data-count="0"/>
+<rect x="396" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1530ms" data-date="2026-01-02" data-count="0"/>
+<rect x="412" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1540ms" data-date="2026-01-03" data-count="0"/>
+<rect x="412" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1550ms" data-date="2026-01-04" data-count="0"/>
+<rect x="412" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1560ms" data-date="2026-01-05" data-count="0"/>
+<rect x="412" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1570ms" data-date="2026-01-06" data-count="0"/>
+<rect x="412" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1580ms" data-date="2026-01-07" data-count="0"/>
+<rect x="412" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1590ms" data-date="2026-01-08" data-count="0"/>
+<rect x="412" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1600ms" data-date="2026-01-09" data-count="0"/>
+<rect x="428" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1610ms" data-date="2026-01-10" data-count="0"/>
+<rect x="428" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1620ms" data-date="2026-01-11" data-count="0"/>
+<rect x="428" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1630ms" data-date="2026-01-12" data-count="0"/>
+<rect x="428" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1640ms" data-date="2026-01-13" data-count="0"/>
+<rect x="428" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1650ms" data-date="2026-01-14" data-count="0"/>
+<rect x="428" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1660ms" data-date="2026-01-15" data-count="0"/>
+<rect x="428" y="120" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 1670ms" data-date="2026-01-16" data-count="2"/>
+<rect x="444" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1680ms" data-date="2026-01-17" data-count="0"/>
+<rect x="444" y="40" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 1690ms" data-date="2026-01-18" data-count="1"/>
+<rect x="444" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1700ms" data-date="2026-01-19" data-count="0"/>
+<rect x="444" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1710ms" data-date="2026-01-20" data-count="0"/>
+<rect x="444" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1720ms" data-date="2026-01-21" data-count="0"/>
+<rect x="444" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1730ms" data-date="2026-01-22" data-count="0"/>
+<rect x="444" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1740ms" data-date="2026-01-23" data-count="0"/>
+<rect x="460" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1750ms" data-date="2026-01-24" data-count="0"/>
+<rect x="460" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1760ms" data-date="2026-01-25" data-count="0"/>
+<rect x="460" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1770ms" data-date="2026-01-26" data-count="0"/>
+<rect x="460" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1780ms" data-date="2026-01-27" data-count="0"/>
+<rect x="460" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1790ms" data-date="2026-01-28" data-count="0"/>
+<rect x="460" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1800ms" data-date="2026-01-29" data-count="0"/>
+<rect x="460" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1810ms" data-date="2026-01-30" data-count="0"/>
+<rect x="476" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1820ms" data-date="2026-01-31" data-count="0"/>
+<rect x="476" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1830ms" data-date="2026-02-01" data-count="0"/>
+<rect x="476" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1840ms" data-date="2026-02-02" data-count="0"/>
+<rect x="476" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1850ms" data-date="2026-02-03" data-count="0"/>
+<rect x="476" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1860ms" data-date="2026-02-04" data-count="0"/>
+<rect x="476" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1870ms" data-date="2026-02-05" data-count="0"/>
+<rect x="476" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1880ms" data-date="2026-02-06" data-count="0"/>
+<rect x="492" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1890ms" data-date="2026-02-07" data-count="0"/>
+<rect x="492" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1900ms" data-date="2026-02-08" data-count="0"/>
+<rect x="492" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1910ms" data-date="2026-02-09" data-count="0"/>
+<rect x="492" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1920ms" data-date="2026-02-10" data-count="0"/>
+<rect x="492" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1930ms" data-date="2026-02-11" data-count="0"/>
+<rect x="492" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1940ms" data-date="2026-02-12" data-count="0"/>
+<rect x="492" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1950ms" data-date="2026-02-13" data-count="0"/>
+<rect x="508" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1960ms" data-date="2026-02-14" data-count="0"/>
+<rect x="508" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1970ms" data-date="2026-02-15" data-count="0"/>
+<rect x="508" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1980ms" data-date="2026-02-16" data-count="0"/>
+<rect x="508" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 1990ms" data-date="2026-02-17" data-count="0"/>
+<rect x="508" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2000ms" data-date="2026-02-18" data-count="0"/>
+<rect x="508" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2010ms" data-date="2026-02-19" data-count="0"/>
+<rect x="508" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2020ms" data-date="2026-02-20" data-count="0"/>
+<rect x="524" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2030ms" data-date="2026-02-21" data-count="0"/>
+<rect x="524" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2040ms" data-date="2026-02-22" data-count="0"/>
+<rect x="524" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2050ms" data-date="2026-02-23" data-count="0"/>
+<rect x="524" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2060ms" data-date="2026-02-24" data-count="0"/>
+<rect x="524" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2070ms" data-date="2026-02-25" data-count="0"/>
+<rect x="524" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2080ms" data-date="2026-02-26" data-count="0"/>
+<rect x="524" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2090ms" data-date="2026-02-27" data-count="0"/>
+<rect x="540" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2100ms" data-date="2026-02-28" data-count="0"/>
+<rect x="540" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2110ms" data-date="2026-03-01" data-count="0"/>
+<rect x="540" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2120ms" data-date="2026-03-02" data-count="0"/>
+<rect x="540" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2130ms" data-date="2026-03-03" data-count="0"/>
+<rect x="540" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2140ms" data-date="2026-03-04" data-count="0"/>
+<rect x="540" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2150ms" data-date="2026-03-05" data-count="0"/>
+<rect x="540" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2160ms" data-date="2026-03-06" data-count="0"/>
+<rect x="556" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2170ms" data-date="2026-03-07" data-count="0"/>
+<rect x="556" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2180ms" data-date="2026-03-08" data-count="0"/>
+<rect x="556" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2190ms" data-date="2026-03-09" data-count="0"/>
+<rect x="556" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2200ms" data-date="2026-03-10" data-count="0"/>
+<rect x="556" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2210ms" data-date="2026-03-11" data-count="0"/>
+<rect x="556" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2220ms" data-date="2026-03-12" data-count="0"/>
+<rect x="556" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2230ms" data-date="2026-03-13" data-count="0"/>
+<rect x="572" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2240ms" data-date="2026-03-14" data-count="0"/>
+<rect x="572" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2250ms" data-date="2026-03-15" data-count="0"/>
+<rect x="572" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2260ms" data-date="2026-03-16" data-count="0"/>
+<rect x="572" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2270ms" data-date="2026-03-17" data-count="0"/>
+<rect x="572" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2280ms" data-date="2026-03-18" data-count="0"/>
+<rect x="572" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2290ms" data-date="2026-03-19" data-count="0"/>
+<rect x="572" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2300ms" data-date="2026-03-20" data-count="0"/>
+<rect x="588" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2310ms" data-date="2026-03-21" data-count="0"/>
+<rect x="588" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2320ms" data-date="2026-03-22" data-count="0"/>
+<rect x="588" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2330ms" data-date="2026-03-23" data-count="0"/>
+<rect x="588" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2340ms" data-date="2026-03-24" data-count="0"/>
+<rect x="588" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2350ms" data-date="2026-03-25" data-count="0"/>
+<rect x="588" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2360ms" data-date="2026-03-26" data-count="0"/>
+<rect x="588" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2370ms" data-date="2026-03-27" data-count="0"/>
+<rect x="604" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2380ms" data-date="2026-03-28" data-count="0"/>
+<rect x="604" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2390ms" data-date="2026-03-29" data-count="0"/>
+<rect x="604" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2400ms" data-date="2026-03-30" data-count="0"/>
+<rect x="604" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2410ms" data-date="2026-03-31" data-count="0"/>
+<rect x="604" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2420ms" data-date="2026-04-01" data-count="0"/>
+<rect x="604" y="104" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 2430ms" data-date="2026-04-02" data-count="1"/>
+<rect x="604" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2440ms" data-date="2026-04-03" data-count="0"/>
+<rect x="620" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2450ms" data-date="2026-04-04" data-count="0"/>
+<rect x="620" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2460ms" data-date="2026-04-05" data-count="0"/>
+<rect x="620" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2470ms" data-date="2026-04-06" data-count="0"/>
+<rect x="620" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2480ms" data-date="2026-04-07" data-count="0"/>
+<rect x="620" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2490ms" data-date="2026-04-08" data-count="0"/>
+<rect x="620" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2500ms" data-date="2026-04-09" data-count="0"/>
+<rect x="620" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2510ms" data-date="2026-04-10" data-count="0"/>
+<rect x="636" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2520ms" data-date="2026-04-11" data-count="0"/>
+<rect x="636" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2530ms" data-date="2026-04-12" data-count="0"/>
+<rect x="636" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2540ms" data-date="2026-04-13" data-count="0"/>
+<rect x="636" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2550ms" data-date="2026-04-14" data-count="0"/>
+<rect x="636" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2560ms" data-date="2026-04-15" data-count="0"/>
+<rect x="636" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2570ms" data-date="2026-04-16" data-count="0"/>
+<rect x="636" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2580ms" data-date="2026-04-17" data-count="0"/>
+<rect x="652" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2590ms" data-date="2026-04-18" data-count="0"/>
+<rect x="652" y="40" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 2600ms" data-date="2026-04-19" data-count="2"/>
+<rect x="652" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2610ms" data-date="2026-04-20" data-count="0"/>
+<rect x="652" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2620ms" data-date="2026-04-21" data-count="0"/>
+<rect x="652" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2630ms" data-date="2026-04-22" data-count="0"/>
+<rect x="652" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2640ms" data-date="2026-04-23" data-count="0"/>
+<rect x="652" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2650ms" data-date="2026-04-24" data-count="0"/>
+<rect x="668" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2660ms" data-date="2026-04-25" data-count="0"/>
+<rect x="668" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2670ms" data-date="2026-04-26" data-count="0"/>
+<rect x="668" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2680ms" data-date="2026-04-27" data-count="0"/>
+<rect x="668" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2690ms" data-date="2026-04-28" data-count="0"/>
+<rect x="668" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2700ms" data-date="2026-04-29" data-count="0"/>
+<rect x="668" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2710ms" data-date="2026-04-30" data-count="0"/>
+<rect x="668" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2720ms" data-date="2026-05-01" data-count="0"/>
+<rect x="684" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2730ms" data-date="2026-05-02" data-count="0"/>
+<rect x="684" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2740ms" data-date="2026-05-03" data-count="0"/>
+<rect x="684" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2750ms" data-date="2026-05-04" data-count="0"/>
+<rect x="684" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2760ms" data-date="2026-05-05" data-count="0"/>
+<rect x="684" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2770ms" data-date="2026-05-06" data-count="0"/>
+<rect x="684" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2780ms" data-date="2026-05-07" data-count="0"/>
+<rect x="684" y="120" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 2790ms" data-date="2026-05-08" data-count="1"/>
+<rect x="700" y="136" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 2800ms" data-date="2026-05-09" data-count="3"/>
+<rect x="700" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2810ms" data-date="2026-05-10" data-count="0"/>
+<rect x="700" y="56" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 2820ms" data-date="2026-05-11" data-count="3"/>
+<rect x="700" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2830ms" data-date="2026-05-12" data-count="0"/>
+<rect x="700" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2840ms" data-date="2026-05-13" data-count="0"/>
+<rect x="700" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2850ms" data-date="2026-05-14" data-count="0"/>
+<rect x="700" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2860ms" data-date="2026-05-15" data-count="0"/>
+<rect x="716" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2870ms" data-date="2026-05-16" data-count="0"/>
+<rect x="716" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2880ms" data-date="2026-05-17" data-count="0"/>
+<rect x="716" y="56" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 2890ms" data-date="2026-05-18" data-count="1"/>
+<rect x="716" y="72" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 2900ms" data-date="2026-05-19" data-count="2"/>
+<rect x="716" y="88" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 2910ms" data-date="2026-05-20" data-count="3"/>
+<rect x="716" y="104" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 2920ms" data-date="2026-05-21" data-count="1"/>
+<rect x="716" y="120" width="14" height="14" fill="#39d353" rx="2" class="heatmap-cell" style="animation-delay: 2930ms" data-date="2026-05-22" data-count="4"/>
+<rect x="732" y="136" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 2940ms" data-date="2026-05-23" data-count="1"/>
+<rect x="732" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2950ms" data-date="2026-05-24" data-count="0"/>
+<rect x="732" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2960ms" data-date="2026-05-25" data-count="0"/>
+<rect x="732" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2970ms" data-date="2026-05-26" data-count="0"/>
+<rect x="732" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 2980ms" data-date="2026-05-27" data-count="0"/>
+<rect x="732" y="104" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 2990ms" data-date="2026-05-28" data-count="2"/>
+<rect x="732" y="120" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3000ms" data-date="2026-05-29" data-count="1"/>
+<rect x="748" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3010ms" data-date="2026-05-30" data-count="0"/>
+<rect x="748" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3020ms" data-date="2026-05-31" data-count="0"/>
+<rect x="748" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3030ms" data-date="2026-06-01" data-count="0"/>
+<rect x="748" y="72" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3040ms" data-date="2026-06-02" data-count="3"/>
+<rect x="748" y="88" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3050ms" data-date="2026-06-03" data-count="1"/>
+<rect x="748" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3060ms" data-date="2026-06-04" data-count="0"/>
+<rect x="748" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3070ms" data-date="2026-06-05" data-count="0"/>
+<rect x="764" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3080ms" data-date="2026-06-06" data-count="0"/>
+<rect x="764" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3090ms" data-date="2026-06-07" data-count="0"/>
+<rect x="764" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3100ms" data-date="2026-06-08" data-count="0"/>
+<rect x="764" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3110ms" data-date="2026-06-09" data-count="0"/>
+<rect x="764" y="88" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3120ms" data-date="2026-06-10" data-count="1"/>
+<rect x="764" y="104" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3130ms" data-date="2026-06-11" data-count="1"/>
+<rect x="764" y="120" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3140ms" data-date="2026-06-12" data-count="1"/>
+<rect x="780" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3150ms" data-date="2026-06-13" data-count="0"/>
+<rect x="780" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3160ms" data-date="2026-06-14" data-count="0"/>
+<rect x="780" y="56" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3170ms" data-date="2026-06-15" data-count="3"/>
+<rect x="780" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3180ms" data-date="2026-06-16" data-count="0"/>
+<rect x="780" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3190ms" data-date="2026-06-17" data-count="0"/>
+<rect x="780" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3200ms" data-date="2026-06-18" data-count="0"/>
+<rect x="780" y="120" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3210ms" data-date="2026-06-19" data-count="1"/>
+<rect x="796" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3220ms" data-date="2026-06-20" data-count="0"/>
+<rect x="796" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3230ms" data-date="2026-06-21" data-count="0"/>
+<rect x="796" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3240ms" data-date="2026-06-22" data-count="0"/>
+<rect x="796" y="72" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 3250ms" data-date="2026-06-23" data-count="2"/>
+<rect x="796" y="88" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3260ms" data-date="2026-06-24" data-count="3"/>
+<rect x="796" y="104" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3270ms" data-date="2026-06-25" data-count="3"/>
+<rect x="796" y="120" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3280ms" data-date="2026-06-26" data-count="1"/>
+<rect x="812" y="136" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3290ms" data-date="2026-06-27" data-count="1"/>
+<rect x="812" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3300ms" data-date="2026-06-28" data-count="0"/>
+<rect x="812" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3310ms" data-date="2026-06-29" data-count="0"/>
+<rect x="812" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3320ms" data-date="2026-06-30" data-count="0"/>
+<rect x="812" y="88" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3330ms" data-date="2026-07-01" data-count="1"/>
+<rect x="812" y="104" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3340ms" data-date="2026-07-02" data-count="1"/>
+<rect x="812" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3350ms" data-date="2026-07-03" data-count="0"/>
+<rect x="828" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3360ms" data-date="2026-07-04" data-count="0"/>
+<rect x="828" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3370ms" data-date="2026-07-05" data-count="0"/>
+<rect x="828" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3380ms" data-date="2026-07-06" data-count="0"/>
+<rect x="828" y="72" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3390ms" data-date="2026-07-07" data-count="1"/>
+<rect x="828" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3400ms" data-date="2026-07-08" data-count="0"/>
+<rect x="828" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3410ms" data-date="2026-07-09" data-count="0"/>
+<rect x="828" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3420ms" data-date="2026-07-10" data-count="0"/>
+<rect x="844" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3430ms" data-date="2026-07-11" data-count="0"/>
+<rect x="844" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3440ms" data-date="2026-07-12" data-count="0"/>
+<rect x="844" y="56" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3450ms" data-date="2026-07-13" data-count="3"/>
+<rect x="844" y="72" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3460ms" data-date="2026-07-14" data-count="1"/>
+<rect x="844" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3470ms" data-date="2026-07-15" data-count="0"/>
+<rect x="844" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3480ms" data-date="2026-07-16" data-count="0"/>
+<rect x="844" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3490ms" data-date="2026-07-17" data-count="0"/>
+<rect x="860" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3500ms" data-date="2026-07-18" data-count="0"/>
+<rect x="860" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3510ms" data-date="2026-07-19" data-count="0"/>
+<rect x="860" y="56" width="14" height="14" fill="#26a641" rx="2" class="heatmap-cell" style="animation-delay: 3520ms" data-date="2026-07-20" data-count="3"/>
+<rect x="860" y="72" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3530ms" data-date="2026-07-21" data-count="0"/>
+<rect x="860" y="88" width="14" height="14" fill="#006d32" rx="2" class="heatmap-cell" style="animation-delay: 3540ms" data-date="2026-07-22" data-count="2"/>
+<rect x="860" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3550ms" data-date="2026-07-23" data-count="0"/>
+<rect x="860" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3560ms" data-date="2026-07-24" data-count="0"/>
+<rect x="876" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3570ms" data-date="2026-07-25" data-count="0"/>
+<rect x="876" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3580ms" data-date="2026-07-26" data-count="0"/>
+<rect x="876" y="56" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3590ms" data-date="2026-07-27" data-count="0"/>
+<rect x="876" y="72" width="14" height="14" fill="#0e4429" rx="2" class="heatmap-cell" style="animation-delay: 3600ms" data-date="2026-07-28" data-count="1"/>
+<rect x="876" y="88" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3610ms" data-date="2026-07-29" data-count="0"/>
+<rect x="876" y="104" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3620ms" data-date="2026-07-30" data-count="0"/>
+<rect x="876" y="120" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3630ms" data-date="2026-07-31" data-count="0"/>
+<rect x="892" y="136" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3640ms" data-date="2026-08-01" data-count="0"/>
+<rect x="892" y="40" width="14" height="14" fill="#161b22" rx="2" class="heatmap-cell" style="animation-delay: 3650ms" data-date="2026-08-02" data-count="0"/>
+<text x="60" y="177" class="heatmap-stats">Less</text>
+<rect x="100" y="165" width="14" height="14" fill="#161b22" rx="2"/>
+<rect x="116" y="165" width="14" height="14" fill="#0e4429" rx="2"/>
+<rect x="132" y="165" width="14" height="14" fill="#006d32" rx="2"/>
+<rect x="148" y="165" width="14" height="14" fill="#26a641" rx="2"/>
+<rect x="164" y="165" width="14" height="14" fill="#39d353" rx="2"/>
+<rect x="180" y="165" width="14" height="14" fill="#69f0a0" rx="2"/>
+<text x="206" y="177" class="heatmap-stats">More</text>
+<text x="60" y="202" class="heatmap-stats">44 contributions in the last year | Current streak: 0 days</text>
+</svg>

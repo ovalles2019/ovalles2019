@@ -1,0 +1,35 @@
+<svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+text { font-family: "Courier New", monospace; fill: #c9d1d9; font-size: 13px; }
+.title { fill: #58a6ff; font-weight: bold; font-size: 14px; }
+.label { fill: #79c0ff; font-weight: bold; }
+.row { animation: slideInLeft 0.4s ease-out forwards; opacity: 0; }
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+</style>
+</defs>
+<rect width="480" height="320" fill="#0d1117" stroke="#30363d" stroke-width="1" rx="4"/>
+<rect width="480" height="35" fill="#30363d" rx="4"/>
+<text x="10" y="25" class="title">oscar@github</text>
+<text x="20" y="55" class="label row" style="animation-delay: 0ms">Now:</text>
+<text x="140" y="55" class="row" style="animation-delay: 50ms">Cloud/AI Engineer</text>
+<text x="140" y="70" class="row" style="animation-delay: 50ms">Agentic Workflows</text>
+<text x="20" y="110" class="label row" style="animation-delay: 100ms">Focus:</text>
+<text x="140" y="110" class="row" style="animation-delay: 150ms">RAG</text>
+<text x="140" y="125" class="row" style="animation-delay: 150ms">LLM Governance</text>
+<text x="140" y="140" class="row" style="animation-delay: 150ms">AWS DevOps</text>
+<text x="20" y="165" class="label row" style="animation-delay: 200ms">Stack:</text>
+<text x="140" y="165" class="row" style="animation-delay: 250ms">Python</text>
+<text x="140" y="180" class="row" style="animation-delay: 250ms">AWS</text>
+<text x="140" y="195" class="row" style="animation-delay: 250ms">LangChain</text>
+<text x="140" y="210" class="row" style="animation-delay: 250ms">FastAPI</text>
+<text x="20" y="220" class="label row" style="animation-delay: 300ms">Certs:</text>
+<text x="140" y="220" class="row" style="animation-delay: 350ms">AWS SAA</text>
+<text x="140" y="235" class="row" style="animation-delay: 350ms">AWS Data Engineer</text>
+<text x="140" y="250" class="row" style="animation-delay: 350ms">Anthropic</text>
+<line x1="20" y1="285" x2="460" y2="285" stroke="#30363d" stroke-width="1"/>
+<text x="20" y="305" style="font-size: 11px; fill: #30363d;">portfolio: oscar-valles.com | AWS SAA-C03 | Anthropic Certified</text>
+</svg>
