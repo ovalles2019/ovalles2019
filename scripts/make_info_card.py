@@ -1,93 +1,154 @@
 #!/usr/bin/env python3
 """
-Create a neofetch-style info card SVG showing role, current focus, stack, and highlights.
-"""
+Neofetch-style info card SVG — terminal chrome matching oscar-ascii.svg,
+with staggered line-by-line fade/slide reveal (CSS keyframes inside the SVG).
 
+Dimensions chosen so width=490 / height scales to match the ASCII portrait
+when that portrait is shown at width=370 (same visual height).
+
+    python scripts/make_info_card.py
+    STATIC=1 python scripts/make_info_card.py   # frozen frame for Quick Look
+"""
+import html
 import os
 
-def create_info_card_svg():
-    """Generate the info card SVG."""
-    
-    # Card dimensions
-    card_width = 480
-    card_height = 320
-    padding = 20
-    row_height = 40
-    label_width = 120
-    
-    # Colors: GitHub dark theme
-    bg_color = "#0d1117"
-    border_color = "#30363d"
-    title_color = "#58a6ff"
-    label_color = "#79c0ff"
-    value_color = "#c9d1d9"
-    accent_colors = {
-        "Now": "#79c0ff",      # Blue
-        "Stack": "#a371f7",    # Purple
-        "Highlights": "#56d364", # Green
-    }
-    
-    svg_lines = [
-        f'<svg viewBox="0 0 {card_width} {card_height}" xmlns="http://www.w3.org/2000/svg">',
-        '<defs>',
-        '<style>',
-        f'text {{ font-family: "Courier New", monospace; fill: {value_color}; font-size: 13px; }}',
-        f'.title {{ fill: {title_color}; font-weight: bold; font-size: 14px; }}',
-        f'.label {{ fill: {label_color}; font-weight: bold; }}',
-        '.row { animation: slideInLeft 0.4s ease-out forwards; opacity: 0; }',
-        '@keyframes slideInLeft {',
-        '  from { opacity: 0; transform: translateX(-10px); }',
-        '  to { opacity: 1; transform: translateX(0); }',
-        '}',
-        '</style>',
-        '</defs>',
-        # Background
-        f'<rect width="{card_width}" height="{card_height}" fill="{bg_color}" stroke="{border_color}" stroke-width="1" rx="4"/>',
-        # Title bar
-        f'<rect width="{card_width}" height="35" fill="{border_color}" rx="4"/>',
-        f'<text x="10" y="25" class="title">oscar@github</text>',
-    ]
-    
-    # Card content
-    content = [
-        ("Now", "Cloud/AI Engineer • Agentic Workflows"),
-        ("Focus", "RAG • LLM Governance • AWS DevOps"),
-        ("Stack", "Python • AWS • LangChain • FastAPI"),
-        ("Certs", "AWS SAA • AWS Data Engineer • Anthropic"),
-    ]
-    
-    y_offset = 55
-    for idx, (label, value) in enumerate(content):
-        delay = idx * 100
-        svg_lines.append(
-            f'<text x="{padding}" y="{y_offset}" class="label row" style="animation-delay: {delay}ms">{label}:</text>'
-        )
-        # Wrap value if it's long
-        words = value.split(" • ")
-        for word_idx, word in enumerate(words):
-            word_y = y_offset + (word_idx * 15)
-            svg_lines.append(
-                f'<text x="{padding + label_width}" y="{word_y}" class="row" style="animation-delay: {delay + 50}ms">{word}</text>'
-            )
-        y_offset += 55
-    
-    # Footer stats
-    svg_lines.append(f'<line x1="{padding}" y1="{card_height - 35}" x2="{card_width - padding}" y2="{card_height - 35}" stroke="{border_color}" stroke-width="1"/>')
-    svg_lines.append(f'<text x="{padding}" y="{card_height - 15}" style="font-size: 11px; fill: {border_color};">portfolio: oscar-valles.com | AWS SAA-C03 | Anthropic Certified</text>')
-    
-    svg_lines.append('</svg>')
-    
-    return "\n".join(svg_lines)
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(HERE, "..", "info-card.svg")
+STATIC = bool(os.environ.get("STATIC"))
+
+# Matches portrait display height when README uses width 370 / 490
+W, H = 700, 550
+PAD = 28
+TITLEBAR_H = 30
+
+BG = "#0d1117"
+BG2 = "#111722"
+FRAME = "#30363d"
+MUTED = "#7d8590"
+INK = "#c9d1d9"
+LABEL = "#79c0ff"
+ACCENT = "#58a6ff"
+GREEN = "#3fb950"
+PURPLE = "#a371f7"
+GOLD = "#f2cc60"
+
+# (label, value, accent_color)
+ROWS = [
+    ("Now", "Cloud & AI/ML Engineer", ACCENT),
+    ("Focus", "Agentic workflows · RAG · MCP tooling", GREEN),
+    ("Stack", "Python · AWS · LangChain · FastAPI · K8s", PURPLE),
+    ("Certs", "AWS SAA-C03 · AWS Data Engineer · Anthropic", GOLD),
+    ("School", "M.S. Computer Engineering · UTD", LABEL),
+    ("Site", "oscar-valles.com", ACCENT),
+]
+
+LINE_DUR = 0.35
+STAGGER = 0.12
+
 
 def main():
-    print("Generating neofetch-style info card SVG...")
-    
-    svg_content = create_info_card_svg()
-    
-    with open("oscar-info-card.svg", "w") as f:
-        f.write(svg_content)
-    
-    print("Created info card SVG: oscar-info-card.svg")
+    parts = []
+    parts.append(
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
+        f'viewBox="0 0 {W} {H}" font-family="ui-monospace, SFMono-Regular, '
+        f'Menlo, Consolas, monospace">'
+    )
+
+    css = f"""
+@keyframes slideIn {{
+  from {{ opacity: 0; transform: translateX(-12px); }}
+  to   {{ opacity: 1; transform: translateX(0); }}
+}}
+.row {{ opacity: 0; animation: slideIn {LINE_DUR:.2f}s ease-out forwards; }}
+""".strip()
+    if not STATIC:
+        parts.append(f"<style>{css}</style>")
+
+    parts.append(
+        "<defs>"
+        f'<linearGradient id="ibg" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/>'
+        "</linearGradient></defs>"
+    )
+    parts.append(f'<rect width="{W}" height="{H}" rx="12" fill="url(#ibg)"/>')
+    parts.append(
+        f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1"/>'
+    )
+    parts.append(f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>')
+    for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
+        parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dotcol}"/>')
+    parts.append(
+        f'<text x="{W/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
+        f'text-anchor="middle">oscar@github: ~$ neofetch</text>'
+    )
+
+    # Header identity block
+    y = TITLEBAR_H + 48
+    delay = 0.0
+    header = (
+        f'<text x="{PAD}" y="{y}" fill="{INK}" font-size="22" font-weight="700">'
+        f'Oscar Valles</text>'
+    )
+    sub = (
+        f'<text x="{PAD}" y="{y + 28}" fill="{MUTED}" font-size="14">'
+        f'Cloud &amp; AI/ML Engineer · Agentic systems</text>'
+    )
+    if STATIC:
+        parts.append(header)
+        parts.append(sub)
+    else:
+        parts.append(f'<g class="row" style="animation-delay:{delay:.2f}s">{header}</g>')
+        delay += STAGGER
+        parts.append(f'<g class="row" style="animation-delay:{delay:.2f}s">{sub}</g>')
+        delay += STAGGER + 0.05
+
+    parts.append(
+        f'<line x1="{PAD}" y1="{y + 48}" x2="{W - PAD}" y2="{y + 48}" '
+        f'stroke="{FRAME}" stroke-opacity="0.7"/>'
+    )
+
+    # Key/value rows
+    row_y = y + 88
+    label_w = 90
+    for label, value, color in ROWS:
+        lab = (
+            f'<text x="{PAD}" y="{row_y}" fill="{color}" font-size="15" font-weight="700">'
+            f'{html.escape(label)}</text>'
+        )
+        sep = f'<text x="{PAD + label_w - 18}" y="{row_y}" fill="{MUTED}" font-size="15">:</text>'
+        val = (
+            f'<text x="{PAD + label_w}" y="{row_y}" fill="{INK}" font-size="15">'
+            f'{html.escape(value)}</text>'
+        )
+        group = lab + sep + val
+        if STATIC:
+            parts.append(group)
+        else:
+            parts.append(f'<g class="row" style="animation-delay:{delay:.2f}s">{group}</g>')
+            delay += STAGGER
+        row_y += 42
+
+    # Status bar
+    status_y = H - 22
+    parts.append(f'<line x1="0" y1="{H - 36}" x2="{W}" y2="{H - 36}" stroke="{FRAME}"/>')
+    parts.append(
+        f'<text x="{PAD}" y="{status_y}" fill="{MUTED}" font-size="12">'
+        f'oscar@github:~$ <tspan fill="{INK}">echo $STATUS</tspan>'
+        f'<tspan fill="{GREEN}">  building agentic systems on AWS</tspan></text>'
+    )
+    parts.append(
+        f'<rect x="{W - PAD - 10}" y="{status_y - 12}" width="8" height="14" fill="{INK}">'
+        f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.51;1" '
+        f'dur="1s" repeatCount="indefinite"/></rect>'
+    )
+
+    parts.append("</svg>")
+    svg = "".join(parts)
+    with open(OUT, "w") as f:
+        f.write(svg)
+    print("wrote", OUT, len(svg), "bytes;", W, "x", H)
+
 
 if __name__ == "__main__":
     main()

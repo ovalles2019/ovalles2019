@@ -1,73 +1,64 @@
-#!/usr/bin/env python3
 """
-Prep a photo for ASCII conversion:
-1. Remove background with rembg (skipped if image already has alpha)
-2. Boost local contrast with CLAHE
-3. Composite onto white background
-Output: source-prepped.png
-"""
+Prepare a portrait photo for clean ASCII conversion:
+  1. remove the background (rembg) so the subject is isolated
+     — skipped when the source already has an alpha cutout
+  2. boost LOCAL contrast (CLAHE) so a flatly-lit face gains highlights and
+     shadows -- this is what turns a dark blob into a recognizable face
+  3. composite the subject onto pure white so the background reads as blank
+     (white -> spaces in the ascii ramp)
 
-import io
+Output: source-prepped.png (grayscale), consumed by make_ascii_svg.py.
+Run once whenever the source photo changes; the ascii SVG itself is static.
+
+    python scripts/prep_photo.py <input.jpg> [output.png]
+"""
+import os
 import sys
+
 import cv2
 import numpy as np
 from PIL import Image
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+INP = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "photo.png")
+OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "source-prepped.png")
 
-def _remove_background(input_data: bytes) -> Image.Image:
-    """Remove background via rembg when available; otherwise keep existing alpha."""
-    img = Image.open(io.BytesIO(input_data)).convert("RGBA")
-    alpha = np.array(img)[:, :, 3]
-    # Already cut out (Facetune / PNG with transparency) — skip rembg
+
+def cutout(path):
+    img = Image.open(path).convert("RGBA")
+    alpha = np.array(img.split()[-1])
+    # Already isolated (Facetune / BG-removed PNG) — skip rembg.
     if alpha.min() < 250:
-        print("Existing alpha channel detected; skipping rembg.")
+        print("existing alpha detected; skipping rembg")
         return img
-
     try:
         from rembg import remove
     except ImportError as exc:
         raise SystemExit(
-            "rembg is required for photos without transparency. "
+            "rembg required for photos without transparency. "
             f"Install it or provide a transparent PNG. ({exc})"
         ) from exc
-
-    print("Removing background...")
-    return Image.open(io.BytesIO(remove(input_data))).convert("RGBA")
-
-
-def prep_photo(input_path):
-    """Prepare a photo for ASCII conversion."""
-
-    print(f"Loading image: {input_path}")
-    with open(input_path, "rb") as f:
-        input_data = f.read()
-
-    img_pil = _remove_background(input_data)
-    img_arr = np.array(img_pil)
-    img_cv = cv2.cvtColor(img_arr, cv2.COLOR_RGBA2BGR)
-    alpha = img_arr[:, :, 3]
-
-    gray = cv2.cvtColor(img_cv, cv2.COLOR_BGR2GRAY)
-
-    print("Boosting local contrast...")
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    enhanced = clahe.apply(gray)
-
-    white_bg = np.ones_like(enhanced) * 255
-    alpha_norm = alpha.astype(float) / 255.0
-    output = (
-        enhanced.astype(float) * alpha_norm
-        + white_bg.astype(float) * (1 - alpha_norm)
-    ).astype(np.uint8)
-
-    output_path = "source-prepped.png"
-    cv2.imwrite(output_path, output)
-    print(f"Saved to: {output_path}")
+    print("removing background with rembg...")
+    return remove(img)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python prep_photo.py <image_path>")
-        sys.exit(1)
+cut = cutout(INP)
+rgb = np.array(cut.convert("RGB"))
+alpha = np.array(cut.split()[-1])
 
-    prep_photo(sys.argv[1])
+# local-contrast the luminance (CLAHE)
+gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+clahe = cv2.createCLAHE(clipLimit=2.6, tileGridSize=(8, 8))
+gray = clahe.apply(gray)
+
+# a touch of global lift so the face sits in the sparse end of the ramp
+gray = cv2.convertScaleAbs(gray, alpha=1.05, beta=18)
+
+# paste onto white using the alpha mask (feathered a hair to avoid a halo)
+mask = alpha.astype(np.float32) / 255.0
+mask = cv2.GaussianBlur(mask, (0, 0), 1.0)
+out = gray.astype(np.float32) * mask + 255.0 * (1.0 - mask)
+out = np.clip(out, 0, 255).astype(np.uint8)
+
+Image.fromarray(out, mode="L").save(OUT)
+print("wrote", OUT, out.shape)
