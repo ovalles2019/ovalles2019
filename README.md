@@ -2,13 +2,7 @@
 
 ## <code>oscar@github ~ $ ./contributions.sh</code>
 
-<<<<<<< HEAD
-- Portfolio site: [oscar-valles.com](https://www.oscar-valles.com/)
-- Blog: [Medium @ovalles6845](https://medium.com/@ovalles6845)
-- M.S. Computer Engineering (cloud & AI focus), @ University of Texas at Dallas
-=======
 ![Contributions](./oscar-contrib-heatmap.svg)
->>>>>>> 29423de (feat: animated profile with ASCII portrait and live heatmap)
 
 ---
 
@@ -54,6 +48,7 @@
 ## Get in Touch
 
 - **Portfolio:** [oscar-valles.com](https://oscar-valles.com)
+- **Blog:** [Medium @ovalles6845](https://medium.com/@ovalles6845)
 - **LinkedIn:** [oscarvalles87](https://www.linkedin.com/in/oscarvalles87/)
 - **Email:** oscar.valles@utdallas.edu
 
