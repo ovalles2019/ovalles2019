@@ -41,6 +41,7 @@
 
 | Project | What it demonstrates |
 |---------|----------------------|
+| [cicd-pipeline-demo](https://github.com/ovalles2019/cicd-pipeline-demo) | Modern CI/CD — lint→build→Trivy→test→GHCR→QA/Staging/Prod |
 | [raditriage](https://github.com/ovalles2019/raditriage) · [live](https://raditriage.onrender.com/) | Agentic vet radiology — classify→RAG→draft→route, RBAC, Claude proxy |
 | [cloud-sre-agent](https://github.com/ovalles2019/cloud-sre-agent) · [live](https://cloud-sre-agent.onrender.com/) | Bedrock SRE/FinOps agent — CloudWatch, Cost Explorer, HITL |
 | [agentic-governance-harness](https://github.com/ovalles2019/agentic-governance-harness) · [live](https://agentic-governance-demo.onrender.com/) | Agentic AI governance benchmark |
