@@ -1,0 +1,44 @@
+# Build output
+bin/
+coverage.out
+coverage.xml
+.render/
+
+# Helm resolves the library chart into charts/ and pins it in Chart.lock.
+# Both are build artefacts of `helm dependency update`, reproducible from the
+# Chart.yaml dependency block, so they are not committed.
+deploy/charts/*/charts/
+deploy/charts/*/Chart.lock
+*.tgz
+
+# Terraform. The lock file is deliberately NOT ignored — it pins provider
+# hashes and is a supply-chain control, so it belongs in git.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+# Never commit a .tfvars that carries real values; envs/*.tfvars are the
+# checked-in, non-secret ones.
+*.auto.tfvars
+override.tf
+override.tf.json
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+*.egg-info/
+
+# Local
+.env
+kubeconfig
+*.log
+
+# Editors
+.idea/
+.vscode/
+*.swp
+.DS_Store

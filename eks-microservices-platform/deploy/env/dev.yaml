@@ -1,0 +1,40 @@
+# Development overrides.
+#
+# Optimised for cost and iteration speed, not availability. Applied on top of
+# each service chart's own values.yaml.
+
+global:
+  environment: dev
+
+replicaCount: 1
+
+# A single replica cannot satisfy any PDB, and an unsatisfiable PDB blocks every
+# node drain — which in dev means Karpenter consolidation and cluster upgrades
+# hang. Turn it off rather than setting an impossible budget.
+podDisruptionBudget:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 192Mi
+
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 3
+
+# Sample every trace. Volume is negligible here and a partial trace is far less
+# useful than a complete one while debugging.
+config:
+  OTEL_TRACE_SAMPLE_RATE: "1.0"
+  LOG_LEVEL: debug
+
+logLevel: debug
+
+# One zone in dev, so zone spreading would only produce unschedulable pods.
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway

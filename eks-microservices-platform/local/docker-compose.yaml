@@ -1,0 +1,115 @@
+# Fast local loop: the whole platform on a laptop, no Kubernetes involved.
+#
+# This is the inner loop. `make kind-up` is the outer one, and runs the real
+# charts on a real (local) cluster.
+
+name: fleet-platform
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: platform
+      POSTGRES_DB: catalog
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # -U and -d matter: without them pg_isready checks the default database
+      # as the default user and reports ready before this one exists, so the
+      # catalog starts against a database that is not there yet.
+      test: ["CMD-SHELL", "pg_isready -U platform -d catalog"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+      start_period: 5s
+
+  catalog:
+    build:
+      context: ..
+      dockerfile: build/go.Dockerfile
+      args:
+        SERVICE: catalog
+        VERSION: local
+    environment:
+      DATABASE_URL: postgres://platform:platform@postgres:5432/catalog?sslmode=disable
+      CATALOG_STORE: postgres
+      ENVIRONMENT: local
+      LOG_LEVEL: debug
+      HTTP_ADDR: ":8080"
+      ADMIN_ADDR: ":9090"
+    ports:
+      - "8081:8080"
+      - "9091:9090"
+    depends_on:
+      postgres:
+        # service_healthy, not service_started. Without it the catalog boots
+        # while Postgres is still initialising, fails its migration and enters
+        # a restart loop that looks like a bug in the service.
+        condition: service_healthy
+    # No compose healthcheck on the Go services: their runtime image is
+    # `scratch`, which has no shell and no curl for a healthcheck command to
+    # invoke. That is a deliberate trade — the same emptiness is why code
+    # execution in these containers has nothing to pivot with. Kubernetes does
+    # not have this problem because the kubelet performs HTTP probes itself
+    # rather than exec-ing inside the container.
+
+  scorer:
+    build:
+      context: ..
+      dockerfile: build/scorer.Dockerfile
+    environment:
+      ENVIRONMENT: local
+      LOG_LEVEL: debug
+      WORKERS: "1"
+      ANOMALY_THRESHOLD: "3.5"
+    ports:
+      - "8082:8080"
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: build/go.Dockerfile
+      args:
+        SERVICE: gateway
+        VERSION: local
+    environment:
+      CATALOG_URL: http://catalog:8080
+      SCORER_URL: http://scorer:8080
+      ENVIRONMENT: local
+      LOG_LEVEL: debug
+      HTTP_ADDR: ":8080"
+      ADMIN_ADDR: ":9090"
+      # No API_KEYS locally, so the gateway runs unauthenticated. The chart
+      # requires keys in every deployed environment.
+      REQUEST_TIMEOUT: 10s
+      UPSTREAM_TIMEOUT: 2s
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_TRACE_SAMPLE_RATE: "1.0"
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    depends_on:
+      - catalog
+      - scorer
+
+  # Traces from all three services end up here. Without a collector the OTLP
+  # exporter retries in the background and clutters the logs, so it is part of
+  # the default stack rather than an optional extra.
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.113.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-collector.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4318:4318"
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --storage.tsdb.retention.time=1h
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+    ports:
+      - "9095:9090"

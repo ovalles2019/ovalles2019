@@ -1,0 +1,14 @@
+# Deployed image for catalog in prod.
+#
+# This file is the deployment record. The release pipeline is the only thing
+# that writes it, and Argo CD reconciles the cluster toward whatever it says —
+# so "what is running in prod" is answered by reading this file at a commit,
+# and a rollback is a revert of it.
+#
+# digest wins over tag when both are set. Deploying by digest is what makes a
+# release immutable: a tag can be repointed at different content after it has
+# been reviewed and signed, so two pods from the "same" release can be running
+# different code.
+image:
+  tag: ""
+  digest: ""

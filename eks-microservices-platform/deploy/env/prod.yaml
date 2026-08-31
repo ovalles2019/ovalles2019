@@ -1,0 +1,51 @@
+# Production overrides.
+#
+# The chart refuses to render a prod release without a pinned image digest or an
+# explicit non-latest tag, so this environment cannot ship an unidentifiable
+# build. See platform.validateImage in the library chart.
+
+global:
+  environment: prod
+
+replicaCount: 3
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+autoscaling:
+  minReplicas: 3
+  maxReplicas: 30
+
+# 5% sampling. Full sampling at production volume costs more in collector and
+# storage than the traces are worth, and tail-based sampling in the collector
+# already keeps every error and slow trace regardless of this rate.
+config:
+  OTEL_TRACE_SAMPLE_RATE: "0.05"
+  LOG_LEVEL: info
+
+logLevel: info
+
+# Spread across zones first, then nodes. Still ScheduleAnyway: a hard constraint
+# turns a zone outage into unschedulable pods, which is worse than imbalance.
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway
+
+networkPolicy:
+  enabled: true
+
+metrics:
+  podMonitor:
+    enabled: true

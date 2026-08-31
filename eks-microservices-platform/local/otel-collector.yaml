@@ -1,0 +1,32 @@
+# Minimal collector for local development.
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  # Bounds collector memory so a burst of spans cannot OOM it and take the
+  # local stack down with it.
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+    spike_limit_mib: 64
+  batch:
+    timeout: 5s
+
+exporters:
+  # Traces are printed rather than shipped anywhere. Running Tempo or Jaeger
+  # locally is a lot of moving parts to confirm that context propagation works,
+  # which is all the local stack needs to show.
+  debug:
+    verbosity: normal
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      # memory_limiter must come first: placed after batch it can only drop
+      # spans that have already been accumulated in memory.
+      processors: [memory_limiter, batch]
+      exporters: [debug]

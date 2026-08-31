@@ -1,0 +1,46 @@
+# Staging overrides.
+#
+# Deliberately shaped like production — same replica counts' structure, same
+# policies, same probes — at smaller scale. A staging environment configured
+# differently from production only tests staging.
+
+global:
+  environment: staging
+
+replicaCount: 2
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 384Mi
+
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 10
+
+config:
+  OTEL_TRACE_SAMPLE_RATE: "0.25"
+  LOG_LEVEL: info
+
+logLevel: info
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway
+
+networkPolicy:
+  enabled: true
+
+metrics:
+  podMonitor:
+    enabled: true

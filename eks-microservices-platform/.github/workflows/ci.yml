@@ -1,0 +1,188 @@
+# Continuous integration.
+#
+# Every step calls a Makefile target rather than re-implementing the command in
+# YAML. That is deliberate: when CI and local development run different
+# commands, "works on my machine" becomes structural, and the pipeline becomes
+# something people push to in order to find out what it thinks.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  # Default to nothing and grant per job. The default token is otherwise
+  # write-capable, and any compromised action in the run inherits it.
+  contents: read
+
+concurrency:
+  # Cancel superseded runs on a branch, but never on main: a cancelled main run
+  # leaves no record of whether that commit was ever green.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  GO_VERSION: "1.25"
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  go:
+    name: go (lint, test, build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - run: make go-lint
+
+      # The race detector, not plain `go test`. The circuit breaker and the
+      # rate limiter are both concurrent, and a data race in either is exactly
+      # the kind of bug that only appears under production load.
+      - run: make go-cover
+
+      - run: make go-build
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: go-coverage
+          path: coverage.out
+          retention-days: 7
+
+  python:
+    name: python (lint, test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - run: make py-lint
+      - run: make py-test
+
+  manifests:
+    name: manifests (render, schema, policy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.3
+
+      - name: Install kubeconform and conftest
+        run: |
+          set -euo pipefail
+          curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+            | tar xz -C /usr/local/bin kubeconform
+          curl -fsSL https://github.com/open-policy-agent/conftest/releases/download/v0.56.0/conftest_0.56.0_Linux_x86_64.tar.gz \
+            | tar xz -C /usr/local/bin conftest
+
+      - run: make helm-lint
+
+      # Renders every chart against every environment and validates the result
+      # against real Kubernetes and CRD schemas. This is what catches an invalid
+      # manifest before `kubectl apply` does, in the middle of a deploy.
+      - run: make validate
+
+      # Enforces the security posture, and asserts the policies can still fail —
+      # a rule with a typo in its path expression otherwise passes forever.
+      - run: make policy
+
+      - name: Install promtool
+        run: |
+          set -euo pipefail
+          curl -fsSL https://github.com/prometheus/prometheus/releases/download/v2.55.1/prometheus-2.55.1.linux-amd64.tar.gz \
+            | tar xz --strip-components=1 -C /usr/local/bin prometheus-2.55.1.linux-amd64/promtool
+
+      - run: make promtool
+
+  terraform:
+    name: terraform (fmt, validate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - run: make tf-check
+      - run: make tf-validate
+
+      # tfsec-style static analysis of the infrastructure itself. Checkov
+      # catches the class of problem a `terraform validate` cannot: an
+      # unencrypted volume, an open security group, a missing log configuration.
+      - name: Static analysis
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: infra/terraform
+          framework: terraform
+          quiet: true
+          soft_fail: false
+          # Skipped with reasons, not silently. Each of these is a documented
+          # decision, and CKV_AWS_79 in particular is a false positive: the
+          # launch template does require IMDSv2.
+          skip_check: CKV_AWS_79,CKV2_AWS_5
+
+  security:
+    name: security (filesystem scan)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan dependencies and IaC
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          format: sarif
+          output: trivy.sarif
+          severity: CRITICAL,HIGH
+          # Reporting rather than blocking here. A new CVE in a transitive
+          # dependency appears without anyone pushing anything, and a pipeline
+          # that turns red on its own gets ignored. The image scan in the
+          # release workflow is the one that blocks a deploy.
+          exit-code: "0"
+
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy.sarif
+
+  # A single required status check, so branch protection does not need updating
+  # every time a job is added or renamed.
+  ci-passed:
+    name: ci passed
+    runs-on: ubuntu-latest
+    needs: [go, python, manifests, terraform, security]
+    if: always()
+    steps:
+      - name: Check results
+        run: |
+          # `needs.*.result` is checked explicitly because a skipped or
+          # cancelled job is not a failure to GitHub, and a gate that only
+          # tests for "failure" passes when a job never ran at all.
+          results='${{ join(needs.*.result, " ") }}'
+          echo "Job results: $results"
+          for result in $results; do
+            if [ "$result" != "success" ]; then
+              echo "A required job did not succeed."
+              exit 1
+            fi
+          done
+          echo "All required jobs succeeded."

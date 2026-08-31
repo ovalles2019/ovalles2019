@@ -1,0 +1,17 @@
+apiVersion: v2
+name: platform-common
+description: |
+  Library chart holding every Kubernetes template the platform's services share.
+
+  Services depend on this instead of each carrying its own copy of a `helm
+  create` scaffold. That is what makes a platform-wide change — a new security
+  context default, a corrected probe, an added topology constraint — one edit
+  rather than one edit per service that drifts apart the moment someone forgets.
+type: library
+version: 1.0.0
+appVersion: "1.0.0"
+maintainers:
+  - name: Oscar Valles
+keywords:
+  - library
+  - platform
