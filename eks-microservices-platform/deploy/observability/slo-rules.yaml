@@ -1,0 +1,288 @@
+# SLO recording and alerting rules.
+#
+# The alerting strategy is multi-window, multi-burn-rate, as described in the
+# Google SRE workbook. The reason it is worth the extra complexity:
+#
+#   A naive "error rate > 1% for 5 minutes" alert has no notion of budget. It
+#   fires on a two-minute blip that costs nothing, and it fires just as loudly
+#   for a slow bleed that will exhaust a month of error budget in three days.
+#   Both wake someone up, so both eventually get ignored.
+#
+#   Burn rate is error rate divided by the rate the SLO can afford. Alerting on
+#   burn rate means severity tracks how fast the budget is actually being spent,
+#   so a page corresponds to something that will genuinely breach the objective.
+#
+# Each alert pairs a long window (does this represent real budget spend?) with a
+# short window (is it still happening now?). The short window is what stops an
+# alert continuing to fire for hours after an incident has resolved.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: fleet-platform-slo
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/part-of: fleet-platform
+    role: slo-rules
+spec:
+  groups:
+    # --- Recording rules ----------------------------------------------------
+    #
+    # Error ratios are precomputed at several windows. Alert expressions then
+    # reference these instead of recomputing a rate() over 100k series on every
+    # evaluation, which is the difference between an alert that evaluates in
+    # milliseconds and one that times out during the incident it exists for.
+    - name: fleet-platform.slo.recording
+      interval: 30s
+      rules:
+        - record: job:slo_errors:ratio_rate5m
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[5m]))
+              /
+            sum by (service) (rate(http_requests_total[5m]))
+
+        - record: job:slo_errors:ratio_rate30m
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[30m]))
+              /
+            sum by (service) (rate(http_requests_total[30m]))
+
+        - record: job:slo_errors:ratio_rate1h
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[1h]))
+              /
+            sum by (service) (rate(http_requests_total[1h]))
+
+        - record: job:slo_errors:ratio_rate2h
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[2h]))
+              /
+            sum by (service) (rate(http_requests_total[2h]))
+
+        - record: job:slo_errors:ratio_rate6h
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[6h]))
+              /
+            sum by (service) (rate(http_requests_total[6h]))
+
+        - record: job:slo_errors:ratio_rate1d
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[1d]))
+              /
+            sum by (service) (rate(http_requests_total[1d]))
+
+        - record: job:slo_errors:ratio_rate3d
+          expr: |
+            sum by (service) (rate(http_requests_total{status_class="5xx"}[3d]))
+              /
+            sum by (service) (rate(http_requests_total[3d]))
+
+        # Latency SLI: the fraction of requests slower than the 500ms objective.
+        #
+        # Computed from bucket counts rather than histogram_quantile, and this
+        # matters. A quantile over a histogram is interpolated within a bucket
+        # and is not aggregatable across pods, so "p99 across the fleet" from
+        # histogram_quantile is an estimate of an estimate. Counting requests
+        # above a bucket boundary is exact, as long as a boundary sits exactly
+        # at the objective — which is why 0.5 is in the bucket list.
+        - record: job:slo_latency_errors:ratio_rate5m
+          expr: |
+            (
+              sum by (service) (rate(http_request_duration_seconds_count[5m]))
+                -
+              sum by (service) (rate(http_request_duration_seconds_bucket{le="0.5"}[5m]))
+            )
+              /
+            sum by (service) (rate(http_request_duration_seconds_count[5m]))
+
+        - record: job:slo_latency_errors:ratio_rate1h
+          expr: |
+            (
+              sum by (service) (rate(http_request_duration_seconds_count[1h]))
+                -
+              sum by (service) (rate(http_request_duration_seconds_bucket{le="0.5"}[1h]))
+            )
+              /
+            sum by (service) (rate(http_request_duration_seconds_count[1h]))
+
+        - record: job:slo_latency_errors:ratio_rate6h
+          expr: |
+            (
+              sum by (service) (rate(http_request_duration_seconds_count[6h]))
+                -
+              sum by (service) (rate(http_request_duration_seconds_bucket{le="0.5"}[6h]))
+            )
+              /
+            sum by (service) (rate(http_request_duration_seconds_count[6h]))
+
+    # --- Availability burn-rate alerts --------------------------------------
+    #
+    # Objective: 99.9% availability over 30 days, so the error budget is 0.1%.
+    #
+    # Burn rate 1 spends the budget exactly over 30 days. Burn rate 14.4 spends
+    # it in ~50 hours; at that speed, 2% of the month's budget is gone in an
+    # hour, which is worth waking someone for. Burn rate 6 over six hours is a
+    # slower bleed that still breaches the objective if left alone — a ticket,
+    # not a page.
+    #
+    # The thresholds are the standard SRE workbook values:
+    #   page:   14.4x over 1h  (short window 5m)
+    #           6x    over 6h  (short window 30m)
+    #   ticket: 3x    over 1d  (short window 2h)
+    #           1x    over 3d  (short window 6h)
+    - name: fleet-platform.slo.availability
+      rules:
+        - alert: ErrorBudgetBurnCritical
+          expr: |
+            (
+              job:slo_errors:ratio_rate1h > (14.4 * 0.001)
+              and
+              job:slo_errors:ratio_rate5m > (14.4 * 0.001)
+            )
+            or
+            (
+              job:slo_errors:ratio_rate6h > (6 * 0.001)
+              and
+              job:slo_errors:ratio_rate30m > (6 * 0.001)
+            )
+          labels:
+            severity: page
+            slo: availability
+          annotations:
+            summary: "{{ $labels.service }} is burning its error budget fast enough to breach the 99.9% objective"
+            description: >-
+              At the current rate the 30-day error budget is exhausted in under
+              two days. The short window confirms this is still happening now
+              rather than a resolved incident still inside the long window.
+            runbook_url: "https://github.com/ovalles2019/eks-microservices-platform/blob/main/docs/runbooks/high-error-rate.md"
+
+        - alert: ErrorBudgetBurnWarning
+          expr: |
+            (
+              job:slo_errors:ratio_rate1d > (3 * 0.001)
+              and
+              job:slo_errors:ratio_rate2h > (3 * 0.001)
+            )
+            or
+            (
+              job:slo_errors:ratio_rate3d > (1 * 0.001)
+              and
+              job:slo_errors:ratio_rate6h > (1 * 0.001)
+            )
+          labels:
+            severity: ticket
+            slo: availability
+          annotations:
+            summary: "{{ $labels.service }} is slowly consuming its error budget"
+            description: >-
+              Not fast enough to page, but the objective is breached within the
+              window if this continues. Investigate during working hours.
+            runbook_url: "https://github.com/ovalles2019/eks-microservices-platform/blob/main/docs/runbooks/high-error-rate.md"
+
+    - name: fleet-platform.slo.latency
+      rules:
+        # Objective: 99% of requests complete within 500ms, so a 1% budget.
+        - alert: LatencyBudgetBurnCritical
+          expr: |
+            job:slo_latency_errors:ratio_rate1h > (14.4 * 0.01)
+            and
+            job:slo_latency_errors:ratio_rate5m > (14.4 * 0.01)
+          labels:
+            severity: page
+            slo: latency
+          annotations:
+            summary: "{{ $labels.service }} is breaching its 500ms latency objective"
+            runbook_url: "https://github.com/ovalles2019/eks-microservices-platform/blob/main/docs/runbooks/latency-slo-burn.md"
+
+    # --- Operational alerts -------------------------------------------------
+    #
+    # These are not SLO alerts. They describe conditions that predict a breach
+    # or that a human must act on even while the SLO is still being met.
+    - name: fleet-platform.operational
+      rules:
+        - alert: CircuitBreakerOpen
+          expr: circuit_breaker_state > 1
+          for: 2m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.service }} has opened its circuit breaker to {{ $labels.upstream }}"
+            description: >-
+              The gateway is shedding load to a dependency it considers
+              unhealthy. Scoring requests are being served degraded or refused.
+            runbook_url: "https://github.com/ovalles2019/eks-microservices-platform/blob/main/docs/runbooks/high-error-rate.md"
+
+        - alert: HPAAtMaxReplicas
+          expr: |
+            kube_horizontalpodautoscaler_status_current_replicas
+              >=
+            kube_horizontalpodautoscaler_spec_max_replicas
+          for: 15m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.horizontalpodautoscaler }} has been pinned at maxReplicas for 15 minutes"
+            description: >-
+              The autoscaler has no headroom left. Any further load increase
+              degrades latency directly, because there is nothing left to scale.
+            runbook_url: "https://github.com/ovalles2019/eks-microservices-platform/blob/main/docs/runbooks/scaling-saturation.md"
+
+        - alert: HPAUnableToScale
+          expr: |
+            kube_horizontalpodautoscaler_status_condition{condition="ScalingLimited",status="true"} == 1
+          for: 15m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.horizontalpodautoscaler }} wants to scale but cannot"
+            description: >-
+              Usually unschedulable pods (no node capacity, or a topology
+              constraint that cannot be satisfied) rather than a problem with
+              the HPA itself. Check pending pods first.
+
+        - alert: PodsCrashLooping
+          expr: |
+            increase(kube_pod_container_status_restarts_total{namespace="fleet-platform"}[15m]) > 3
+          for: 5m
+          labels:
+            severity: page
+          annotations:
+            summary: "{{ $labels.namespace }}/{{ $labels.pod }} is restarting repeatedly"
+
+        - alert: DeploymentReplicasMismatch
+          expr: |
+            kube_deployment_spec_replicas{namespace="fleet-platform"}
+              !=
+            kube_deployment_status_replicas_available{namespace="fleet-platform"}
+          for: 20m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.deployment }} has not reached its desired replica count in 20 minutes"
+            description: >-
+              A rollout that has been stuck this long is not progressing on its
+              own. Check for unschedulable pods, failing readiness probes, or an
+              image that cannot be pulled.
+
+        - alert: PodDisruptionBudgetBlocking
+          expr: kube_poddisruptionbudget_status_expected_pods - kube_poddisruptionbudget_status_desired_healthy < 0
+          for: 10m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.poddisruptionbudget }} cannot be satisfied and is blocking evictions"
+            description: >-
+              An unsatisfiable PDB stalls every node drain, which blocks cluster
+              upgrades and Karpenter consolidation indefinitely.
+
+        - alert: NoTrafficReceived
+          expr: |
+            sum by (service) (rate(http_requests_total[10m])) == 0
+          for: 10m
+          labels:
+            severity: ticket
+          annotations:
+            summary: "{{ $labels.service }} has received no requests for 10 minutes"
+            description: >-
+              A ratio-based SLO alert is silent at zero traffic, because zero
+              divided by zero is not a number. This catches the outage that
+              looks like perfect health: nothing is reaching the service at all.

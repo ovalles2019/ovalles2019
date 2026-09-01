@@ -1,0 +1,68 @@
+# Gateway overrides. Everything not set here comes from platform-common.
+
+# Separate admin listener, so probes and /metrics are never reachable
+# through the Ingress.
+adminPort: 9090
+
+component: edge
+
+image:
+  repository: ghcr.io/ovalles2019/eks-microservices-platform/gateway
+  tag: ""
+
+replicaCount: 3
+
+# The gateway is I/O-bound: it spends nearly all of its time waiting on catalog
+# and scorer, not computing. It is therefore sized for connection concurrency
+# and scaled for availability, not for CPU — which is why autoscaling stays off
+# here and is on for the scorer.
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+goMaxProcsFromLimit: false
+
+autoscaling:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+config:
+  CATALOG_URL: http://catalog:8080
+  SCORER_URL: http://scorer:8080
+  UPSTREAM_TIMEOUT: 2s
+  UPSTREAM_RETRY_ATTEMPTS: "3"
+  REQUEST_TIMEOUT: 10s
+  RATE_LIMIT_RPS: "100"
+  RATE_LIMIT_BURST: "200"
+  # A catalog outage costs enrichment, not the whole scoring path.
+  DEGRADE_ON_CATALOG_FAILURE: "true"
+  SHUTDOWN_GRACE: 25s
+  OTEL_TRACE_SAMPLE_RATE: "0.1"
+
+# API keys are never written here. External Secrets syncs them from AWS Secrets
+# Manager into a Secret and this references it by name.
+envFromSecret:
+  - name: API_KEYS
+    secretName: gateway-secrets
+    secretKey: api-keys
+
+networkPolicy:
+  enabled: true
+  # The only service reachable from outside the mesh.
+  allowIngressController: true
+  allowMonitoring: true
+  allowTo:
+    - name: catalog
+      port: 8080
+    - name: scorer
+      port: 8080
+
+metrics:
+  podMonitor:
+    enabled: true

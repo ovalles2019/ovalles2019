@@ -1,0 +1,10 @@
+apiVersion: v2
+name: gateway
+description: Public edge — authenticates callers, rate-limits per client, and fans out to catalog and scorer behind circuit breakers.
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+  - name: platform-common
+    version: 1.0.0
+    repository: file://../platform-common

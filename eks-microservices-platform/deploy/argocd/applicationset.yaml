@@ -1,0 +1,160 @@
+# GitOps wiring.
+#
+# One ApplicationSet generates nine Argo CD Applications — three services across
+# three environments — from a matrix generator, rather than nine hand-written
+# Application manifests that drift apart the moment someone edits one and
+# forgets the other eight.
+#
+# The deeper point is what "deploy" means here. CI never runs `helm upgrade` and
+# never holds cluster credentials at all: it builds an image, signs it, and
+# commits the new tag. Argo CD reconciles the cluster toward git. So the
+# repository is the record of what is deployed, a rollback is a revert, and
+# manual drift in the cluster is corrected automatically instead of silently
+# becoming the real configuration.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fleet-platform
+  namespace: argocd
+spec:
+  # Orphaned Applications are deleted when their generator entry disappears.
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - service: gateway
+                - service: catalog
+                - service: scorer
+          - list:
+              elements:
+                - env: dev
+                  namespace: fleet-platform-dev
+                  # Dev self-heals and prunes: it should always match git, and
+                  # nobody should be hand-editing it.
+                  autoSync: "true"
+                  selfHeal: "true"
+                - env: staging
+                  namespace: fleet-platform-staging
+                  autoSync: "true"
+                  selfHeal: "true"
+                - env: prod
+                  namespace: fleet-platform
+                  # Production syncs are manual. Not because automation is
+                  # untrusted, but because the promotion decision belongs to a
+                  # person until the canary analysis has a track record. The
+                  # Rollout still gates the traffic shift once a sync starts.
+                  autoSync: "false"
+                  selfHeal: "false"
+
+  template:
+    metadata:
+      name: '{{service}}-{{env}}'
+      labels:
+        app.kubernetes.io/part-of: fleet-platform
+        platform.fleet.io/environment: '{{env}}'
+      # Without this finalizer, deleting the Application leaves every resource
+      # it created orphaned in the cluster with nothing managing them.
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: fleet-platform
+      source:
+        repoURL: https://github.com/ovalles2019/eks-microservices-platform.git
+        targetRevision: main
+        path: 'deploy/charts/{{service}}'
+        helm:
+          # The shared environment overlay first, then the per-service image
+          # record the release pipeline writes. Order matters: the later file
+          # wins, so the recorded digest overrides anything the overlay says.
+          valueFiles:
+            - '../../env/{{env}}.yaml'
+            - '../../env/images/{{env}}/{{service}}.yaml'
+          # Fail the sync rather than rendering an empty string for a missing
+          # value. A silently-empty image tag deploys :latest.
+          ignoreMissingValueFiles: false
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          # Server-side apply, so a large CRD does not hit the annotation size
+          # limit that client-side apply's last-applied-configuration imposes.
+          - ServerSideApply=true
+          # Wait for resources to actually become healthy before reporting the
+          # sync successful, so a failed rollout surfaces as a failed sync.
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 15s
+            factor: 2
+            maxDuration: 5m
+---
+# The project is the security boundary: it restricts what these Applications
+# may deploy, where, and from which repository. Without one, every Application
+# runs with Argo CD's full cluster permissions and a compromised repo can create
+# ClusterRoleBindings.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: fleet-platform
+  namespace: argocd
+spec:
+  description: Fleet platform services.
+
+  sourceRepos:
+    - https://github.com/ovalles2019/eks-microservices-platform.git
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: fleet-platform
+    - server: https://kubernetes.default.svc
+      namespace: fleet-platform-dev
+    - server: https://kubernetes.default.svc
+      namespace: fleet-platform-staging
+
+  # No cluster-scoped resources at all. These charts create only namespaced
+  # objects, so anything cluster-scoped appearing in a sync is either a mistake
+  # or an attempt at privilege escalation.
+  clusterResourceWhitelist: []
+
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: Service
+    - group: ''
+      kind: ServiceAccount
+    - group: ''
+      kind: ConfigMap
+    - group: apps
+      kind: Deployment
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
+    - group: policy
+      kind: PodDisruptionBudget
+    - group: networking.k8s.io
+      kind: NetworkPolicy
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: monitoring.coreos.com
+      kind: PodMonitor
+    - group: argoproj.io
+      kind: Rollout
+    - group: argoproj.io
+      kind: AnalysisTemplate
+    - group: external-secrets.io
+      kind: ExternalSecret
+
+  # Secrets are deliberately absent from the whitelist above. They are created
+  # by External Secrets from AWS Secrets Manager, never by a synced manifest, so
+  # a credential can never arrive through git.
+
+  roles:
+    - name: read-only
+      description: Read-only access for anyone who needs to see deployment state.
+      policies:
+        - p, proj:fleet-platform:read-only, applications, get, fleet-platform/*, allow

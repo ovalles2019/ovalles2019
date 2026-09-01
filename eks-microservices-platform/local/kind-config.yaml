@@ -1,0 +1,49 @@
+# A local cluster shaped enough like EKS that the same charts apply unchanged.
+#
+# Three workers, not one. A single-node cluster silently satisfies every
+# topologySpreadConstraint and PodDisruptionBudget, so the availability
+# configuration is never actually exercised until production — which is exactly
+# where you do not want to discover it is wrong.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: fleet-platform
+
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 8080
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 8443
+        protocol: TCP
+
+  # Fake zone labels, so the zone-level topologySpreadConstraints the charts
+  # set are real constraints here rather than no-ops.
+  - role: worker
+    labels:
+      topology.kubernetes.io/zone: local-a
+      workload: application
+  - role: worker
+    labels:
+      topology.kubernetes.io/zone: local-b
+      workload: application
+  - role: worker
+    labels:
+      topology.kubernetes.io/zone: local-c
+      workload: system
+
+networking:
+  # kindnet does not enforce NetworkPolicy. Disabling the default CNI lets the
+  # script install Calico instead, so the default-deny policies the charts
+  # render are actually enforced locally — otherwise they render, apply, and do
+  # nothing, which is worse than not having them.
+  disableDefaultCNI: true
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: "10.96.0.0/16"

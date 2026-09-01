@@ -1,0 +1,89 @@
+# Scorer overrides. Everything not set here comes from platform-common.
+#
+# This is the one service in the platform where horizontal autoscaling is the
+# right answer: it is stateless, CPU-bound, and its request cost is a function
+# of the payload rather than of a fixed per-request overhead.
+
+component: compute
+
+image:
+  repository: ghcr.io/ovalles2019/eks-microservices-platform/scorer
+  tag: ""
+
+replicaCount: 2
+
+# uvicorn serves one app on one port, so unlike the Go services the scorer
+# declares no separate admin listener: probes and /metrics live alongside the
+# API on 8080. It simply does not set adminPort, and the library resolves both
+# to the service port.
+probes:
+  startup:
+    periodSeconds: 2
+    failureThreshold: 30
+    timeoutSeconds: 2
+
+metrics:
+  podMonitor:
+    enabled: true
+
+# The distroless python base runs as uid 65532, and the kubelet rejects a pod
+# whose runAsUser does not exist in the image. This overrides the platform
+# default of 10001 to match build/Dockerfile.scorer.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+resources:
+  requests:
+    # 500m is the number the HPA's utilisation target is a percentage of, so it
+    # has to reflect what a pod actually uses under normal load. Guessing low
+    # makes the HPA scale out before a pod is meaningfully busy; guessing high
+    # makes it wait until pods are already saturated.
+    cpu: 500m
+    memory: 256Mi
+  limits:
+    # No CPU limit: throttling a scoring pod at its limit adds tail latency
+    # while the HPA is still deciding to scale, which is the opposite of what
+    # is needed under a spike. Memory is limited because it is not compressible.
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 20
+  # 70% of the 500m request, so a pod scales out at ~350m sustained.
+  targetCPUUtilizationPercentage: 70
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 30
+      percent: 100
+      pods: 4
+    scaleDown:
+      # Five minutes. Scoring load is bursty, and reclaiming pods after every
+      # short lull produces continuous flapping and cold starts.
+      stabilizationWindowSeconds: 300
+      percent: 50
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+config:
+  # One uvicorn worker per pod, so the HPA scales pods rather than each pod
+  # hiding load behind its own process pool. Two layers of concurrency make the
+  # CPU signal the HPA reads much harder to reason about. See docs/adr/0011.
+  WORKERS: "1"
+  ANOMALY_THRESHOLD: "3.5"
+  DRAIN_DELAY_SECONDS: "5"
+  EXPOSE_OPENAPI: "false"
+
+networkPolicy:
+  enabled: true
+  allowMonitoring: true
+  # Only the gateway calls the scorer.
+  allowFrom:
+    - name: gateway

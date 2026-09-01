@@ -1,0 +1,214 @@
+# Build, scan, sign and publish images, then hand off to GitOps.
+#
+# Note what this workflow never does: it never runs `kubectl apply` or `helm
+# upgrade`, and it never holds cluster credentials. It produces a signed image
+# and commits the new tag; Argo CD reconciles the cluster toward git.
+#
+# That inversion is what makes the repository the record of what is deployed. CI
+# that deploys directly can put anything into a cluster and leave no trace, and
+# a rollback then means remembering which pipeline run to re-trigger rather than
+# reverting a commit.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to build (e.g. v1.2.3)"
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    name: build ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # Required for keyless signing: cosign exchanges this token for a
+      # short-lived certificate from Fulcio, so no signing key is ever stored.
+      id-token: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: gateway
+            dockerfile: build/go.Dockerfile
+          - service: catalog
+            dockerfile: build/go.Dockerfile
+          - service: scorer
+            dockerfile: build/scorer.Dockerfile
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: version
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            version="${{ inputs.version }}"
+          else
+            version="${GITHUB_REF#refs/tags/}"
+          fi
+          # Validated rather than trusted: this string becomes an image tag and
+          # is interpolated into later steps.
+          if ! [[ "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Version '$version' is not valid semver with a leading v." >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          # arm64 as well as amd64: Graviton nodes are materially cheaper per
+          # unit of compute, and an amd64-only image quietly rules them out.
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            SERVICE=${{ matrix.service }}
+            VERSION=${{ steps.version.outputs.version }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.service }}:${{ steps.version.outputs.version }}
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.service }}:latest
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,scope=${{ matrix.service }},mode=max
+          # Build provenance and an SBOM, attached to the image in the registry.
+          # This is what makes "is this image affected by the new CVE in
+          # library X" answerable in seconds rather than by rebuilding.
+          provenance: true
+          sbom: true
+
+      # Blocking, unlike the filesystem scan in CI. A vulnerable image must not
+      # reach a registry that a cluster will pull from.
+      - name: Scan the built image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.service }}@${{ steps.build.outputs.digest }}
+          format: table
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+
+      - uses: sigstore/cosign-installer@v3
+
+      # Signed by digest, never by tag. A tag can be repointed after signing,
+      # so a tag signature says nothing about the bytes that get pulled.
+      - name: Sign the image
+        run: |
+          cosign sign --yes \
+            "${REGISTRY}/${REPO}/${SERVICE}@${DIGEST}"
+        env:
+          REGISTRY: ${{ env.REGISTRY }}
+          REPO: ${{ github.repository }}
+          SERVICE: ${{ matrix.service }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+
+      # The digest is what actually gets deployed, so it has to reach the
+      # promote job. Matrix job outputs collide (each leg overwrites the last),
+      # so each leg writes its own artifact instead.
+      - name: Record the digest
+        run: |
+          set -euo pipefail
+          mkdir -p digests
+          echo "${{ steps.build.outputs.digest }}" > "digests/${{ matrix.service }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.service }}
+          path: digests/${{ matrix.service }}
+          retention-days: 30
+
+  promote:
+    name: promote to staging
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      # The only write this pipeline performs: a commit recording which image
+      # staging should run. Argo CD does the rest.
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: digest-*
+          path: digests
+          merge-multiple: false
+
+      # Writes the digest, not just the tag. Argo CD then deploys content that
+      # cannot change under it: repointing the tag afterwards has no effect,
+      # because the manifest names the bytes.
+      - name: Record the staging images
+        run: |
+          set -euo pipefail
+          version="${{ needs.build.outputs.version }}"
+
+          for service in gateway catalog scorer; do
+            digest_file="digests/digest-${service}/${service}"
+            if [ ! -f "$digest_file" ]; then
+              echo "No digest artifact for ${service}; the build leg did not complete." >&2
+              exit 1
+            fi
+            digest="$(tr -d '[:space:]' < "$digest_file")"
+
+            if ! [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+              echo "Digest for ${service} is not a sha256 reference: '${digest}'" >&2
+              exit 1
+            fi
+
+            cat > "deploy/env/images/staging/${service}.yaml" <<EOF
+          # Deployed image for ${service} in staging.
+          #
+          # Written by the release pipeline; do not edit by hand. This file is
+          # the deployment record: reading it at a commit answers "what was
+          # running", and a rollback is a revert of it.
+          #
+          # digest wins over tag. Deploying by digest is what makes a release
+          # immutable — a tag can be repointed at different content after it has
+          # been reviewed and signed.
+          image:
+            tag: "${version}"
+            digest: "${digest}"
+          EOF
+          done
+
+      - name: Commit
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- deploy/env/images/staging; then
+            echo "Staging already records these images; nothing to commit."
+            exit 0
+          fi
+
+          git add deploy/env/images/staging
+          git commit -m "chore(release): promote ${{ needs.build.outputs.version }} to staging"
+          git push

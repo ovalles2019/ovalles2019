@@ -1,0 +1,68 @@
+# Catalog overrides. Everything not set here comes from platform-common.
+
+# Separate admin listener, so probes and /metrics are never reachable
+# through the Ingress.
+adminPort: 9090
+
+component: data
+
+image:
+  repository: ghcr.io/ovalles2019/eks-microservices-platform/catalog
+  tag: ""
+
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+# Catalog is not autoscaled on CPU, and that is deliberate. Its replica count is
+# bounded by the database connection pool, not by CPU: DB_MAX_CONNS x replicas
+# must stay under the instance's max_connections. Scaling out under load would
+# exhaust connections and take down every replica at once — the failure mode is
+# worse than the saturation it was trying to relieve. See docs/adr/0009.
+autoscaling:
+  enabled: false
+
+# Boot runs migrations, so allow more time before the pod is declared failed.
+probes:
+  startup:
+    periodSeconds: 2
+    failureThreshold: 45
+    timeoutSeconds: 2
+
+config:
+  CATALOG_STORE: postgres
+  DB_MAX_CONNS: "10"
+  DB_MIN_CONNS: "2"
+  DB_CONNECT_TIMEOUT: 5s
+  DB_MIGRATE_ON_BOOT: "true"
+  REQUEST_TIMEOUT: 10s
+  SHUTDOWN_GRACE: 25s
+  OTEL_TRACE_SAMPLE_RATE: "0.1"
+
+envFromSecret:
+  - name: DATABASE_URL
+    secretName: catalog-secrets
+    secretKey: database-url
+
+networkPolicy:
+  enabled: true
+  allowMonitoring: true
+  # Only the gateway may reach the catalog. Nothing else in the cluster can
+  # read the device registry, and nothing at all can reach it from outside.
+  allowFrom:
+    - name: gateway
+  allowExternalCIDRs:
+    # RDS lives in the VPC's private subnets. Narrow this to the database
+    # subnet CIDR per environment rather than leaving it VPC-wide.
+    - cidr: 10.0.0.0/16
+      ports:
+        - 5432
+
+metrics:
+  podMonitor:
+    enabled: true

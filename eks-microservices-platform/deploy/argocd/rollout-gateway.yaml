@@ -1,0 +1,226 @@
+# Argo Rollouts canary for the gateway.
+#
+# The problem this solves: a normal Deployment rollout is only gated on the
+# readiness probe. A build that starts, passes readiness and then returns 500s
+# for a code path the probe never touches rolls out to 100% of traffic
+# perfectly happily. Readiness answers "is the process up", not "is this version
+# behaving".
+#
+# This Rollout sends a small slice of real traffic to the new version and gates
+# each promotion on the same metrics the SLO is computed from. If error rate or
+# latency degrades, it aborts and shifts traffic back automatically — no human
+# in the loop, no minutes of full-traffic breakage while someone is paged.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: gateway
+  namespace: fleet-platform
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: fleet-platform
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+
+  strategy:
+    canary:
+      canaryService: gateway-canary
+      stableService: gateway-stable
+
+      trafficRouting:
+        nginx:
+          stableIngress: gateway
+
+      # A background analysis runs for the whole rollout, in addition to the
+      # per-step gates. A regression that only appears under sustained load can
+      # pass a 5-minute step check and still be a problem.
+      analysis:
+        templates:
+          - templateName: gateway-success-rate
+        startingStep: 2
+        args:
+          - name: service
+            value: gateway-canary
+
+      steps:
+        # 10% of traffic, held for 5 minutes. Long enough to accumulate a
+        # statistically meaningful number of requests; short enough that a bad
+        # build affects few users.
+        - setWeight: 10
+        - pause: { duration: 5m }
+
+        - analysis:
+            templates:
+              - templateName: gateway-success-rate
+              - templateName: gateway-latency
+            args:
+              - name: service
+                value: gateway-canary
+
+        - setWeight: 30
+        - pause: { duration: 5m }
+
+        - analysis:
+            templates:
+              - templateName: gateway-success-rate
+              - templateName: gateway-latency
+            args:
+              - name: service
+                value: gateway-canary
+
+        - setWeight: 60
+        - pause: { duration: 10m }
+
+        # An indefinite pause before the final step. Everything up to here is
+        # automatic; taking the last 40% of production traffic is a decision a
+        # person makes. Remove this step once the pipeline has earned trust.
+        - pause: {}
+
+      # Keep full capacity during the rollout: never drop below the desired
+      # count, and allow one extra pod so a new revision starts before an old
+      # one is removed.
+      maxUnavailable: 0
+      maxSurge: 1
+
+      # Time for the endpoints controller to stop routing to a pod that is
+      # being scaled down, so the canary shift itself does not drop requests.
+      scaleDownDelaySeconds: 30
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/part-of: fleet-platform
+    spec:
+      serviceAccountName: gateway
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: gateway
+      containers:
+        - name: gateway
+          image: ghcr.io/ovalles2019/eks-microservices-platform/gateway:v1.0.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: admin
+              containerPort: 9090
+          envFrom:
+            - configMapRef:
+                name: gateway
+          env:
+            - name: API_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secrets
+                  key: api-keys
+          startupProbe:
+            httpGet: { path: /startupz, port: 9090 }
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet: { path: /healthz, port: 9090 }
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: { path: /readyz, port: 9090 }
+            periodSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+---
+# Success-rate gate.
+#
+# failureLimit is 2, not 0. A single failed measurement can be a scrape gap or
+# one unlucky interval; aborting on it makes every deploy a coin flip and the
+# team turns the analysis off. Two consecutive failures is a signal.
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: gateway-success-rate
+  namespace: fleet-platform
+spec:
+  args:
+    - name: service
+  metrics:
+    - name: success-rate
+      interval: 30s
+      count: 10
+      successCondition: result[0] >= 0.99
+      failureLimit: 2
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring.svc.cluster.local:9090
+          # The denominator is guarded: with no traffic at all this expression
+          # is 0/0, which is NaN, which fails successCondition and aborts a
+          # perfectly good rollout during a quiet period. `or vector(1)`
+          # substitutes a passing value when the canary has served nothing yet.
+          query: |
+            (
+              sum(rate(http_requests_total{service="{{args.service}}",status_class!="5xx"}[2m]))
+                /
+              sum(rate(http_requests_total{service="{{args.service}}"}[2m]))
+            ) or vector(1)
+---
+# Latency gate: 99% of canary requests must complete within the 500ms objective.
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: gateway-latency
+  namespace: fleet-platform
+spec:
+  args:
+    - name: service
+  metrics:
+    - name: latency-p99-under-objective
+      interval: 30s
+      count: 10
+      successCondition: result[0] >= 0.99
+      failureLimit: 2
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring.svc.cluster.local:9090
+          # Counted from bucket boundaries rather than histogram_quantile: an
+          # interpolated quantile is not aggregatable across pods, and gating a
+          # rollout on an estimate of an estimate is how a bad build gets
+          # promoted.
+          query: |
+            (
+              sum(rate(http_request_duration_seconds_bucket{service="{{args.service}}",le="0.5"}[2m]))
+                /
+              sum(rate(http_request_duration_seconds_count{service="{{args.service}}"}[2m]))
+            ) or vector(1)

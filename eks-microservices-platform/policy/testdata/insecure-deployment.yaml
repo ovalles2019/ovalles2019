@@ -1,0 +1,81 @@
+# Deliberately insecure manifest used to prove the policies can fail.
+#
+# A policy suite that only ever runs against compliant input tells you nothing:
+# a rule with a typo in its path expression passes silently forever. `make
+# policy-negative` asserts conftest rejects this file, so the rules are checked
+# in both directions.
+#
+# This is never applied to a cluster. It is a test fixture.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insecure-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: insecure-example
+  template:
+    metadata:
+      labels:
+        app: insecure-example
+    spec:
+      # Violation: uses the default ServiceAccount and mounts its token.
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      # Violation: shares the node's network and PID namespaces.
+      hostNetwork: true
+      hostPID: true
+      # Violation: no seccompProfile.
+      securityContext: {}
+      volumes:
+        # Violation: hostPath mount.
+        - name: host-root
+          hostPath:
+            path: /
+      containers:
+        - name: app
+          # Violation: :latest tag.
+          image: nginx:latest
+          # Violation: privileged, root, writable rootfs, escalation allowed,
+          # no dropped capabilities.
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+          # Violation: no resource requests or limits.
+          resources: {}
+          # Violation: a literal credential in an env var.
+          env:
+            - name: DATABASE_PASSWORD
+              value: hunter2
+          # Violation: no probes at all.
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insecure-example
+spec:
+  # Violation: a public ELB per service.
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: insecure-example
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: insecure-example
+spec:
+  # Violation: autoscaling/v1, and therefore no behavior block.
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: insecure-example
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 50
