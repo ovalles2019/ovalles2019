@@ -1,0 +1,20 @@
+Senior Platform Engineer, AI Infrastructure
+Location: Dallas, TX (Hybrid, 3 days in office)
+Employment: Full-time | Salary range: $165,000 - $195,000
+
+About the role
+We are building the platform that serves our LLM-powered products to millions of users.
+You will own the Kubernetes foundation, the CI/CD pipelines, and the observability stack
+that our ML engineers deploy on.
+
+What you'll need
+- 5+ years of experience in platform, SRE, or DevOps roles
+- Deep hands-on experience with Kubernetes (EKS preferred) and Terraform
+- Strong Python; comfortable reading Go
+- Experience running CI/CD with GitHub Actions or Argo CD
+- Production experience with Prometheus and Grafana
+
+Nice to have
+- Experience deploying LLM applications or RAG pipelines (LangChain, LangGraph)
+- Familiarity with vector databases such as pgvector
+- AWS certifications

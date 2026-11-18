@@ -1,0 +1,30 @@
+[project]
+name = "job-intel"
+version = "0.1.0"
+description = "Job-posting intelligence agent: LangExtract + LangChain + LangGraph, traced in LangSmith & Langfuse, prototyped in Langflow"
+requires-python = ">=3.11"
+dependencies = [
+  "langchain>=1.5",
+  "langchain-anthropic>=1.7.10",
+  "langgraph>=1.2",
+  "langsmith>=0.15",
+  "langfuse>=5.2",
+  "langextract>=1.7",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+job-intel = "job_intel.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
